@@ -4,46 +4,58 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mahasiswa")
-public class Mahasiswa {
+@Inheritance(strategy = InheritanceType.JOINED)
+//@DiscriminatorColumn(name = "tipe_mahasiswa")
+public abstract class Mahasiswa implements Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 12, columnDefinition = "CHAR(12)")
+    private String nim;
 
+    @Column(length = 255, columnDefinition = "VARCHAR(255)")
     private String nama;
-    private String jurusan;
+
+    @Column(length = 255, columnDefinition = "VARCHAR(255)")
+    private String email;
+
+    @Column(length = 255, columnDefinition = "VARCHAR(255)")
+    private String password;
 
     public Mahasiswa() {
     }
 
-    public Mahasiswa(Long id, String nama, String jurusan) {
-        this.id = id;
+    public Mahasiswa(String nim, String nama, String email, String password) {
+        this.nim = nim;
         this.nama = nama;
-        this.jurusan = jurusan;
+        this.email = email;
+        this.password = password;
     }
 
     // Getters & Setters
-    public Long getId() {
-        return id;
-    }
+    public String getNim() {return this.nim;}
+    public String getNama() {return this.nama;}
+    public String getEmail() {return this.email;}
+    public String getPassword() {return this.password;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNama() {
-        return nama;
+    public void setNim(String nim) {
+        this.nim = nim;
     }
 
     public void setNama(String nama) {
         this.nama = nama;
     }
 
-    public String getJurusan() {
-        return jurusan;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setJurusan(String jurusan) {
-        this.jurusan = jurusan;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+    public abstract void login();
+    public abstract void register();
+    public abstract void logout();
+    public abstract void updateProfile();
 }
