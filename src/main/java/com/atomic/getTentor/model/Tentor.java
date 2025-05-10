@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Tentor {
     private double ipk;
-    private List<String> pengalaman;
-    private List<MataKuliah> listMataKuliah;
-    private List<Review> reviews;
+    private String pengalaman;
+    private MataKuliah listMataKuliah;
+    private Review reviews;
 
     public Tentor(String nama,
                   String email,
@@ -17,9 +17,9 @@ public class Tentor {
                   double ipk) 
     {
         this.ipk = ipk;
-        this.pengalaman = new ArrayList<>();
-        this.listMataKuliah = new ArrayList<>();
-        this.reviews = new ArrayList<>();
+        this.pengalaman = new pengalaman;
+        this.listMataKuliah = new listmatakuliah;
+        this.reviews = new reviews;
     }
 
     public double getIpk() {
