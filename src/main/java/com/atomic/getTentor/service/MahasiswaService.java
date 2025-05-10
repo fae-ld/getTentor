@@ -16,4 +16,8 @@ public class MahasiswaService {
     public List<Mahasiswa> findMahasiswaByNama(String nama) {
         return mahasiswaRepository.findByNamaContaining(nama);
     }
+
+    public List<Mahasiswa> findAllMahasiswa() {
+        return mahasiswaRepository.findAll();
+    }
 }

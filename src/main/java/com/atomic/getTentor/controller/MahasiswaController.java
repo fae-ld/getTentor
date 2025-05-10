@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mahasiswa")
+@RequestMapping("/api/mahasiswa")
 public class MahasiswaController {
     @Autowired
     private MahasiswaService mahasiswaService;
+
+    @GetMapping
+    public ResponseEntity<List<Mahasiswa>> getAllMahasiswa() {
+        return ResponseEntity.ok(mahasiswaService.findAllMahasiswa());
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Mahasiswa>> searchMahasiswa(@RequestParam String nama) {

@@ -1,52 +1,51 @@
 package com.atomic.getTentor.model;
 
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+@Entity
+@Table(name = "tentor")
 public class Tentor {
-    private double ipk;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    // Hubungan one-to-one ke Mahasiswa
+    @OneToOne
+    @JoinColumn(name = "nim", referencedColumnName = "nim", unique = true)
+    private Mahasiswa mahasiswa;
+
+    @Column(columnDefinition = "double")
+    private Double ipk;
+
+    @Column(columnDefinition = "TEXT")
     private String pengalaman;
-    private MataKuliah listMataKuliah;
-    private Review reviews;
 
-    public Tentor(String nama,
-                  String email,
-                  String username,
-                  String password,
-                  String alamat,
-                  double ipk) 
-    {
+    public Tentor() {}
+
+    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman) {
+        this.mahasiswa = mahasiswa;
         this.ipk = ipk;
-        this.pengalaman = new pengalaman;
-        this.listMataKuliah = new listmatakuliah;
-        this.reviews = new reviews;
+        this.pengalaman = pengalaman;
     }
 
-    public double getIpk() {
-        return ipk;
-    }
+    // Getters & Setters
+    public Integer getId() { return id; }
+    public Mahasiswa getMahasiswa() { return mahasiswa; }
+    public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
+    public Double getIpk() { return ipk; }
+    public void setIpk(Double ipk) { this.ipk = ipk; }
+    public String getPengalaman() { return pengalaman; }
+    public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
 
-    public void setIpk(double ipk) {
-        this.ipk = ipk;
-    }
-
-    public void addPengalaman(String newpengalaman) {
-        pengalaman.add(newpengalaman);
-    }
-
-    public void removePengalaman(String deletepengalaman) {
-        pengalaman.remove(deletepengalaman);
-    }
-
-    public void login() {
-        System.out.println("You have succesfully log-in.");
-    }
-
-    public void register() {
-        System.out.println("Registrasion affirmative.");
-    }
-
-    public void logout() {
-        System.out.println("You have succesfully loged-out.");
+    public List<String> getPengalamanList() {
+        if(this.pengalaman == null || this.pengalaman.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(this.pengalaman.split("\\|"));
     }
 }
