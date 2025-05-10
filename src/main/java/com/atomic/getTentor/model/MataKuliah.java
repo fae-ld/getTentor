@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class MataKuliah {
     @Id
     
-    @Column(length = 12, columnDefinition = "VARCHAR(12)")
+    @Column(length = 255, columnDefinition = "VARCHAR(255)")
     private String nama;
 
     public MataKuliah(String nama) {
