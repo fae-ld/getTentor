@@ -9,15 +9,19 @@ public class Tentor {
     private List<MataKuliah> listMataKuliah;
     private List<Review> reviews;
 
-    // Constructor
-    public Tentor(String nama, String email, String username, String password, String alamat, double ipk) {
+    public Tentor(String nama,
+                  String email,
+                  String username,
+                  String password,
+                  String alamat,
+                  double ipk) 
+    {
         this.ipk = ipk;
         this.pengalaman = new ArrayList<>();
         this.listMataKuliah = new ArrayList<>();
         this.reviews = new ArrayList<>();
     }
 
-    // Getter dan Setter untuk ipk
     public double getIpk() {
         return ipk;
     }
@@ -26,28 +30,23 @@ public class Tentor {
         this.ipk = ipk;
     }
 
-    // Menambahkan pengalaman
-    public void addPengalaman(String pengalamanBaru) {
-        pengalaman.add(pengalamanBaru);
+    public void addPengalaman(String newpengalaman) {
+        pengalaman.add(newpengalaman);
     }
 
-    // Menghapus pengalaman
-    public void removePengalaman(String pengalamanUntukDihapus) {
-        pengalaman.remove(pengalamanUntukDihapus);
+    public void removePengalaman(String deletepengalaman) {
+        pengalaman.remove(deletepengalaman);
     }
 
-    // Method login
     public void login() {
-        System.out.println("Login berhasil.");
+        System.out.println("You have succesfully log-in.");
     }
 
-    // Method register
     public void register() {
-        System.out.println("Registrasi berhasil.");
+        System.out.println("Registrasion affirmative.");
     }
 
-    // Method logout
     public void logout() {
-        System.out.println("Logout berhasil.");
+        System.out.println("You have succesfully loged-out.");
     }
 }
