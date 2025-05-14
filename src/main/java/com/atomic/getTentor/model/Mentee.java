@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mentee")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class Mentee extends Mahasiswa {
 
     
