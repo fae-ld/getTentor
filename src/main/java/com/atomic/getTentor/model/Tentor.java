@@ -1,10 +1,17 @@
 package com.atomic.getTentor.model;
 
-import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tentor")
@@ -25,6 +32,9 @@ public class Tentor {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
+    @Column(nullable = false)
+    private String password;
+
     public Tentor() {}
 
     public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman) {
@@ -41,6 +51,8 @@ public class Tentor {
     public void setIpk(Double ipk) { this.ipk = ipk; }
     public String getPengalaman() { return pengalaman; }
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password;}
 
     public List<String> getPengalamanList() {
         if(this.pengalaman == null || this.pengalaman.trim().isEmpty()) {
