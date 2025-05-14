@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mahasiswa")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Mahasiswa implements Account {
 
     @Id
