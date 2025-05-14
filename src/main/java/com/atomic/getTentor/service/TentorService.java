@@ -1,14 +1,14 @@
 package com.atomic.getTentor.service;
 
-import com.atomic.getTentor.dto.TentorDTO;
-import com.atomic.getTentor.model.Mahasiswa;
-import com.atomic.getTentor.model.Tentor;
-import com.atomic.getTentor.repository.TentorRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.atomic.getTentor.dto.TentorDTO;
+import com.atomic.getTentor.model.Tentor;
+import com.atomic.getTentor.repository.TentorRepository;
 
 @Service
 public class TentorService {
@@ -20,6 +20,10 @@ public class TentorService {
         return tentors.stream()
                 .map(TentorDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    public Tentor findByEmail(String email) {
+        return tentorRepository.findByEmail(email);
     }
 
 }

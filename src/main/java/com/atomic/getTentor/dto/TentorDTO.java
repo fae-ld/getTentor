@@ -1,9 +1,9 @@
 package com.atomic.getTentor.dto;
 
+import java.util.List;
+
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.Tentor;
-
-import java.util.List;
 
 public class TentorDTO {
     private Integer id;
@@ -12,6 +12,7 @@ public class TentorDTO {
     private String email;
     private Double ipk;
     private List<String> pengalaman;
+    private String password;
 
     public TentorDTO(Tentor tentor) {
         if (tentor == null) {
@@ -37,6 +38,7 @@ public class TentorDTO {
     public String getEmail() { return email; }
     public Double getIpk() { return ipk; }
     public List<String> getPengalaman() { return pengalaman; }
+    public String getPassword() { return password; }
 
     public void setId(Integer id) { this.id = id; }
     public void setNim(String nim) { this.nim = nim; }
@@ -44,4 +46,5 @@ public class TentorDTO {
     public void setEmail(String email) { this.email = email; }
     public void setIpk(Double ipk) { this.ipk = ipk; }
     public void setPengalaman(List<String> pengalaman) { this.pengalaman = pengalaman; }
+    public void setPassword(String password) { this.password = password; }
 }
