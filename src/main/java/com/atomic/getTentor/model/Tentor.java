@@ -41,7 +41,6 @@ public class Tentor {
     @Column(name="foto_url",length = 512)
     private String fotoUrl;
 
-
     public Tentor() {}
 
     public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl) {

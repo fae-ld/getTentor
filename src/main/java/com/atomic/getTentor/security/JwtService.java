@@ -3,13 +3,18 @@ package com.atomic.getTentor.security;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
+@Service
 public class JwtService {
     private final Key key;
     private final JwtConfig jwtConfig;
 
+    @Autowired
     public JwtService(Key key, JwtConfig jwtConfig) {
         this.key = key;
         this.jwtConfig = jwtConfig;
