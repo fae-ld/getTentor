@@ -2,6 +2,7 @@ package com.atomic.getTentor.model;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "review")
 
@@ -19,11 +20,38 @@ public class Review {
     @JoinColumn(name = "tentor_id")
     private Tentor tentor;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String komentar;
+
+    @Column(nullable = false)
+    private Integer rating;
+
+
+
     public Review() {}
 
-    public Review(Mentee mentee, Tentor tentor) {
+    public Review(Mentee mentee, Tentor tentor,String komentar, Integer rating) {
         this.mentee = mentee;
         this.tentor = tentor;
+        this.komentar = komentar;
+        this.rating = rating;
+    }
+
+    public String getKomentar(){
+        return this.komentar;
+    }
+
+    public void setKomentar(String komentar){
+        this.komentar = komentar;
+    }
+
+    public Integer getRating(){
+        return this.rating;
+    }
+
+    public void setRating(Integer rating){
+        this.rating = rating;
     }
 
     public Integer getId() {
