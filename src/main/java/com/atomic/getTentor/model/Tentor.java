@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "tentor")
@@ -32,13 +37,27 @@ public class Tentor {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
+    
+    @Column(name="foto_url",length = 512)
+    private String fotoUrl;
+
+
     public Tentor() {}
 
-    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman) {
+    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl) {
         this.mahasiswa = mahasiswa;
         this.ipk = ipk;
         this.pengalaman = pengalaman;
+        this.fotoUrl = fotoUrl;
     }
+
+    @ManyToMany
+    @JoinTable(
+        name = "tentor_matakuliah",
+        joinColumns = @JoinColumn(name = "post_id"),
+        inverseJoinColumns = @JoinColumn(name = "mk_id")
+    )
+    private List<MataKuliah> listMataKuliah = new ArrayList<MataKuliah>();
 
     // Getters & Setters
     public Integer getId() { return id; }
@@ -48,6 +67,11 @@ public class Tentor {
     public void setIpk(Double ipk) { this.ipk = ipk; }
     public String getPengalaman() { return pengalaman; }
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
+    public void setFotoUrl(String fotoUrl){this.fotoUrl=fotoUrl;}
+    public String getFotoUrl(){return this.fotoUrl;}
+    public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
+    public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
+
 
     public String getEmail() {
         return mahasiswa != null ? mahasiswa.getEmail() : null;
