@@ -34,6 +34,16 @@ public class TentorController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody TentorDTO tentorDTO) {
+        try {
+            tentorService.register(tentorDTO);
+            return ResponseEntity.ok("Registrasi berhasil!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     
 }
 

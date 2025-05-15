@@ -10,4 +10,5 @@ import java.util.List;
 public interface MahasiswaRepository extends JpaRepository<Mahasiswa, String> {
     List<Mahasiswa> findByNamaContaining(String nama);
     List<Mahasiswa> findByNamaContainingIgnoreCase(String nama);
+    boolean existsByEmail(String email);
 }
