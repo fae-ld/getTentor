@@ -1,5 +1,8 @@
 package com.atomic.getTentor.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +14,10 @@ public class MataKuliah {
 
     @Column(length = 255, columnDefinition = "VARCHAR(255)")
     private String nama;
+
+    @ManyToMany(mappedBy = "listMataKuliah")
+    private List<Tentor> listTentor = new ArrayList<Tentor>();
+
 
     public MataKuliah(Integer id, String nama) {
         this.id = id;
