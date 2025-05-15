@@ -53,7 +53,7 @@ public class Tentor {
     @ManyToMany
     @JoinTable(
         name = "tentor_matakuliah",
-        joinColumns = @JoinColumn(name = "post_id"),
+        joinColumns = @JoinColumn(name = "tentor_id"),
         inverseJoinColumns = @JoinColumn(name = "mk_id")
     )
     private List<MataKuliah> listMataKuliah = new ArrayList<MataKuliah>();
