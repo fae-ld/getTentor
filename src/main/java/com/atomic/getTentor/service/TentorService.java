@@ -67,6 +67,4 @@ public class TentorService {
         // 5. Simpen Tentor ke database
         tentorRepository.save(tentor);
     }
-    
-
 }
