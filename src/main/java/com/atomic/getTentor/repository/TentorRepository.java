@@ -8,5 +8,5 @@ import com.atomic.getTentor.model.Tentor;
 
 public interface TentorRepository extends JpaRepository<Tentor, Integer> {
     List<Tentor> findByMahasiswaIsNotNull();
-    Tentor findByEmail(String email);
+    Tentor findByMahasiswaEmail(String email);
 }

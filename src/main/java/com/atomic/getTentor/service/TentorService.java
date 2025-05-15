@@ -11,6 +11,8 @@ import com.atomic.getTentor.dto.TentorDTO;
 import com.atomic.getTentor.model.Tentor;
 import com.atomic.getTentor.repository.TentorRepository;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Service
 public class TentorService {
     @Autowired
@@ -23,15 +25,13 @@ public class TentorService {
                 .collect(Collectors.toList());
     }
 
-    public Tentor findByEmail(String email) {
-        return tentorRepository.findByEmail(email);
-    }
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void login(String email, String password) {
-        Tentor tentor = tentorRepository.findByEmail(email);
-        if (tentor == null || !BCrypt.checkpw(password, tentor.getPassword())) {
+        Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
+        if (tentor == null || !passwordEncoder.matches(password, tentor.getPassword())) {
             throw new RuntimeException("Invalid email or password");
-            }   
+        }
     }
     
 

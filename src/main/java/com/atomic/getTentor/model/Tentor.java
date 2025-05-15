@@ -32,9 +32,6 @@ public class Tentor {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
-    @Column(nullable = false)
-    private String password;
-
     public Tentor() {}
 
     public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman) {
@@ -51,8 +48,15 @@ public class Tentor {
     public void setIpk(Double ipk) { this.ipk = ipk; }
     public String getPengalaman() { return pengalaman; }
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password;}
+
+    public String getEmail() {
+        return mahasiswa != null ? mahasiswa.getEmail() : null;
+    }
+    public String getPassword() {
+        return mahasiswa != null ? mahasiswa.getPassword() : null;
+    }
+
+    public void setPassword(String password) { this.mahasiswa.setPassword(password);}
 
     public List<String> getPengalamanList() {
         if(this.pengalaman == null || this.pengalaman.trim().isEmpty()) {
