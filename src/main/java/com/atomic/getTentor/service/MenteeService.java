@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.atomic.getTentor.dto.MenteeDTO;
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.Mentee;
 import com.atomic.getTentor.repository.MahasiswaRepository;
@@ -56,7 +57,7 @@ public class MenteeService {
         Mentee mentee = new Mentee();
         mentee.setMahasiswa(mahasiswa); // Set relasi ke Mahasiswa
 
-        // 5. Simpen mentee ke database
+
         menteeRepository.save(mentee);
     }
 }
