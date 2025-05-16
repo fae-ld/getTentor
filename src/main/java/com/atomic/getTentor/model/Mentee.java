@@ -26,8 +26,9 @@ public class Mentee extends Mahasiswa {
         super();
     }
 
-    public Mentee(String nim, String nama, String email, String password) {
+    public Mentee(String nim, String nama, String email, String password,String fotoUrl) {
         super(nim, nama, email, password);
+        this.fotoUrl = fotoUrl;
     }
 
     public List<Tentor> getTentorFavorite() {
