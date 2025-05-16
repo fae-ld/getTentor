@@ -46,6 +46,12 @@ public class Mentee extends Mahasiswa {
         tentorFavorite.remove(tentor);
     }
 
+    public void setFotoUrl(String fotoUrl){
+        this.fotoUrl=fotoUrl;}
+    
+    public String getFotoUrl(){
+        return this.fotoUrl;}
+
     @Override
     public void login() {
         // implementation not yet;
