@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -40,6 +41,9 @@ public class Tentor {
     
     @Column(name="foto_url",length = 512)
     private String fotoUrl;
+
+    @OneToMany(mappedBy = "tentor")
+    private List<Review> listReview = new ArrayList<>();
 
     public Tentor() {}
 
@@ -87,4 +91,25 @@ public class Tentor {
         }
         return Arrays.asList(this.pengalaman.split("\\|"));
     }
+
+
+    public List<Review> getListReview() {
+        return listReview;
+    }
+
+    public void setListReview(List<Review> listReview) {
+        this.listReview = listReview;
+    }
+
+    public double getAverageRating() {
+        if (listReview == null || listReview.isEmpty()) {
+            return 0.0;
+        }
+        double total = 0.0;
+        for (Review review : listReview) {
+            total += review.getRating();
+        }
+        return total / listReview.size();
+    }
+
 }
