@@ -26,8 +26,9 @@ public class Mentee extends Mahasiswa {
         super();
     }
 
-    public Mentee(String nim, String nama, String email, String password) {
+    public Mentee(String nim, String nama, String email, String password,String fotoUrl) {
         super(nim, nama, email, password);
+        this.fotoUrl = fotoUrl;
     }
 
     public List<Tentor> getTentorFavorite() {
@@ -45,6 +46,12 @@ public class Mentee extends Mahasiswa {
     public void removeTentorFavorite(Tentor tentor) {
         tentorFavorite.remove(tentor);
     }
+
+    public void setFotoUrl(String fotoUrl){
+        this.fotoUrl=fotoUrl;}
+    
+    public String getFotoUrl(){
+        return this.fotoUrl;}
 
     @Override
     public void login() {
