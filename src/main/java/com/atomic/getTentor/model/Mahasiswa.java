@@ -19,6 +19,8 @@ public class Mahasiswa implements Account {
     @Column(length = 255, columnDefinition = "VARCHAR(255)")
     private String password;
 
+    
+
     public Mahasiswa() {}
 
     public Mahasiswa(String nim, String nama, String email, String password) {

@@ -1,0 +1,11 @@
+# Perbedaan dan Urutan `fetch` dan `pull` pada Git
+
+- **`git fetch`** digunakan untuk mengambil data terbaru dari repository remote tanpa langsung menggabungkannya ke branch lokal Anda. Data yang diambil akan disimpan di branch remote-tracking.
+- **`git pull`** adalah gabungan dari `git fetch` diikuti dengan `git merge`. Artinya, setelah mengambil data terbaru, perubahan tersebut langsung digabungkan ke branch lokal Anda.
+
+## Urutan Penggunaan
+
+- Jika Anda hanya ingin melihat perubahan terbaru tanpa mengubah branch lokal, gunakan `git fetch` terlebih dahulu.
+- Jika Anda ingin langsung mengambil dan menggabungkan perubahan ke branch lokal, gunakan `git pull`.
+
+Biasanya, Anda cukup menggunakan `git pull` untuk memperbarui branch lokal. Namun, jika ingin lebih hati-hati dan meninjau perubahan terlebih dahulu, lakukan `git fetch` lalu cek perbedaannya sebelum melakukan merge.

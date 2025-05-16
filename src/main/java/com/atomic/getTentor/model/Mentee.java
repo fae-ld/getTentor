@@ -19,6 +19,13 @@ public class Mentee extends Mahasiswa {
     )
     private List<Tentor> tentorFavorite = new ArrayList<Tentor>();;
 
+    @Column(name="foto_url",length = 512)
+    private String fotoUrl;
+
+    public Mentee() {
+        super();
+    }
+
     public Mentee(String nim, String nama, String email, String password) {
         super(nim, nama, email, password);
     }
