@@ -10,13 +10,13 @@ public class Mahasiswa implements Account {
     @Column(length = 12, columnDefinition = "CHAR(12)")
     private String nim;
 
-    @Column(length = 255, columnDefinition = "VARCHAR(255)")
+    @Column(length = 255, columnDefinition = "VARCHAR(255)", nullable = false)
     private String nama;
 
-    @Column(length = 255, columnDefinition = "VARCHAR(255)")
+    @Column(length = 255, columnDefinition = "VARCHAR(255)", nullable = false)
     private String email;
 
-    @Column(length = 255, columnDefinition = "VARCHAR(255)")
+    @Column(length = 255, columnDefinition = "VARCHAR(255)", nullable = false)
     private String password;
 
     
