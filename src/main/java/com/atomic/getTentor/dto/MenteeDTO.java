@@ -38,6 +38,8 @@ public class MenteeDTO {
     // Getters
     public Integer getId() { return id; }
     public MahasiswaDTO getMahasiswa() { return mahasiswa; }
+    public String getNim() { return mahasiswa != null ? mahasiswa.getNim() : null; }
+    public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
     public String getFotoUrl() { return fotoUrl; }
     public List<TentorDTO> getTentorFavorite() { return tentorFavorite; }
     public String getEmail() { return email; }
