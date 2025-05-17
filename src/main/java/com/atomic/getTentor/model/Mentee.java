@@ -3,7 +3,16 @@ package com.atomic.getTentor.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "mentee")
@@ -37,6 +46,9 @@ public class Mentee {
     public Integer getId() { return id; }
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
+
+    public String getEmail() { return mahasiswa != null ? mahasiswa.getEmail() : null; }
+    public String getPassword() { return mahasiswa != null ? mahasiswa.getPassword() : null;}
 
     public List<Tentor> getTentorFavorite() {
         return tentorFavorite;
