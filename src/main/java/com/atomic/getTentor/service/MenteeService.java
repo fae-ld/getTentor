@@ -1,13 +1,17 @@
 package com.atomic.getTentor.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.atomic.getTentor.dto.MenteeDTO;
+import com.atomic.getTentor.dto.TentorDTO;
+import com.atomic.getTentor.model.Tentor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.atomic.getTentor.dto.MenteeDTO;
+//import com.atomic.getTentor.dto.MenteeDTO;
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.Mentee;
 import com.atomic.getTentor.repository.MahasiswaRepository;
@@ -32,32 +36,32 @@ public class MenteeService {
     
     public void login(String email, String password) {
         Mentee mentee = menteeRepository.findByMahasiswaEmail(email);
-        if (mentee == null || !passwordEncoder.matches(password, mentee.getPassword())) {
+        if (mentee == null || !passwordEncoder.matches(password, mentee.getMahasiswa().getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
     }
 
-    public void register(MenteeDTO menteeDTO) {
-        // 1. Cek email ada ga
-        if (mahasiswaRepository.existsByEmail(menteeDTO.getEmail())) {
-            throw new RuntimeException("Email sudah digunakan!");
-        }
-
-        // 2. Buat objek Mahasiswa
-        Mahasiswa mahasiswa = new Mahasiswa();
-        mahasiswa.setNim(menteeDTO.getNim());
-        mahasiswa.setNama(menteeDTO.getNama());
-        mahasiswa.setEmail(menteeDTO.getEmail());
-        mahasiswa.setPassword(passwordEncoder.encode(menteeDTO.getPassword())); // Hash password
-
-        // 3. Simpen Mahasiswa ke database
-        mahasiswaRepository.save(mahasiswa);
-
-        // 4. Buat objek Mentee
-        Mentee mentee = new Mentee();
-        mentee.setMahasiswa(mahasiswa); // Set relasi ke Mahasiswa
-
-
-        menteeRepository.save(mentee);
-    }
+//    public void register(MenteeDTO menteeDTO) {
+//        // 1. Cek email ada ga
+//        if (mahasiswaRepository.existsByEmail(menteeDTO.getEmail())) {
+//            throw new RuntimeException("Email sudah digunakan!");
+//        }
+//
+//        // 2. Buat objek Mahasiswa
+//        Mahasiswa mahasiswa = new Mahasiswa();
+//        mahasiswa.setNim(menteeDTO.getNim());
+//        mahasiswa.setNama(menteeDTO.getNama());
+//        mahasiswa.setEmail(menteeDTO.getEmail());
+//        mahasiswa.setPassword(passwordEncoder.encode(menteeDTO.getPassword())); // Hash password
+//
+//        // 3. Simpen Mahasiswa ke database
+//        mahasiswaRepository.save(mahasiswa);
+//
+//        // 4. Buat objek Mentee
+//        Mentee mentee = new Mentee();
+//        mentee.setMahasiswa(mahasiswa); // Set relasi ke Mahasiswa
+//
+//
+//        menteeRepository.save(mentee);
+//    }
 }

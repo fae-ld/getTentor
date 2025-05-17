@@ -16,8 +16,8 @@ public class ReviewDTO {
 
 
         if (review.getMentee() != null && review.getMentee() != null) {
-            this.reviewerNama = review.getMentee().getNama();
-            this.reviewerNim = review.getMentee().getNim();
+            this.reviewerNama = review.getMentee().getMahasiswa().getNama();
+            this.reviewerNim = review.getMentee().getMahasiswa().getNim();
         } else {
             this.reviewerNama = "Anonim";
             this.reviewerNim = "-";

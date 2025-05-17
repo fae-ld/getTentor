@@ -12,8 +12,8 @@ import com.atomic.getTentor.model.Mentee;
 public interface MenteeRepository extends JpaRepository<Mentee, String> {
     List<Mentee> findByMahasiswaIsNotNull();
     Mentee findByMahasiswaEmail(String email);
-    Mentee findByNim(String nim);
-    List<Mentee> findByNamaContainingIgnoreCase(String nama);
-    boolean existsByEmail(String email);
-    boolean existsByNim(String nim);
+    Mentee findByMahasiswaNim(String nim);
+    List<Mentee> findByMahasiswaNamaContainingIgnoreCase(String nama);
+    boolean existsByMahasiswaEmail(String email);
+    boolean existsByMahasiswaNim(String nim);
 }

@@ -38,7 +38,6 @@ public class Tentor {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
-    
     @Column(name="foto_url",length = 512)
     private String fotoUrl;
 
@@ -75,7 +74,6 @@ public class Tentor {
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
 
-
     public String getEmail() {
         return mahasiswa != null ? mahasiswa.getEmail() : null;
     }
@@ -91,7 +89,6 @@ public class Tentor {
         }
         return Arrays.asList(this.pengalaman.split("\\|"));
     }
-
 
     public List<Review> getListReview() {
         return listReview;
