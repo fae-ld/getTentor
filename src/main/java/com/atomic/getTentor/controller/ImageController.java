@@ -30,8 +30,11 @@ import java.util.UUID;
 @RequestMapping("/api/images")
 public class ImageController {
 
-    @Value("${app.upload.dir}")
-    private final String uploadDir = "uploads/";
+    private final String uploadDir;
+
+    public ImageController(@Value("${app.upload.dir}") String uploadDir) {
+        this.uploadDir = uploadDir;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
