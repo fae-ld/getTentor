@@ -9,7 +9,7 @@ import com.atomic.getTentor.model.Mentee;
 
 
 @Repository
-public interface MenteeRepository extends JpaRepository<Mentee, String> {
+public interface MenteeRepository extends JpaRepository<Mentee, Integer> {
     List<Mentee> findByMahasiswaIsNotNull();
     Mentee findByMahasiswaEmail(String email);
     Mentee findByMahasiswaNim(String nim);

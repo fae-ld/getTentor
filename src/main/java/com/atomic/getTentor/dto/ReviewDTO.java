@@ -4,7 +4,7 @@ import com.atomic.getTentor.model.Review;
 
 public class ReviewDTO {
     private Integer id;
-    private double rating;
+    private int rating;
     private String komentar;
     private String reviewerNama;
     private String reviewerNim;
@@ -28,8 +28,8 @@ public class ReviewDTO {
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
     public String getKomentar() { return komentar; }
     public void setKomentar(String komentar) { this.komentar = komentar; }
