@@ -44,6 +44,7 @@ public class Tentor {
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
 
+
     public Tentor() {}
 
     public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl) {
