@@ -3,8 +3,13 @@ export default {
   content: ["./src/**/*.{html,js,ts,jsx,tsx}",
     "./public/index.html"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Outfit', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
+
 }
 
