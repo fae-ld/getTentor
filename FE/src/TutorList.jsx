@@ -5,7 +5,7 @@ const tutors = [
   {
     name: 'Seixin',
     image: 'seixin.jpg',
-    subjects: ['PBO', 'Jarkom', 'other'],
+    subjects: ['PBO', 'Jarkom', 'APPL', 'AI'],
   },
   {
     name: 'Saiki Kusuo',
@@ -15,12 +15,12 @@ const tutors = [
   {
     name: 'Uesugi Fuutarou',
     image: 'uesugi.jpg',
-    subjects: ['Kalkulus', 'Statistika', 'other'],
+    subjects: ['Kalkulus', 'Statistika', 'Bindo'],
   },
   {
     name: 'Yuiga Nariyuki',
     image: 'yuiga.jpg',
-    subjects: ['Fisika', 'Bindo', 'other'],
+    subjects: ['Fisika', 'Bindo', 'Bing', 'Kalkulus', 'Statistika'],
   },
 ];
 
