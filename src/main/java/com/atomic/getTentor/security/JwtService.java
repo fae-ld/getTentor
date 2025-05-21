@@ -2,12 +2,10 @@ package com.atomic.getTentor.security;
 
 import java.security.Key;
 import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
@@ -24,7 +22,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()))
-                .signWith(key)
+                .signWith(key)  // Pastikan key yang digunakan sudah benar
                 .compact();
     }
 
@@ -34,7 +32,7 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-                return claims.getSubject();
+        return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
@@ -45,7 +43,7 @@ public class JwtService {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            return false;
+            return false;  // Jika error, token tidak valid
         }
     }
 }
