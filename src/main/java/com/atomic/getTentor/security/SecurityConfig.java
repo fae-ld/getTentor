@@ -17,14 +17,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/tentors/login", "/api/tentors/register").permitAll()
-                        .requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll()
-                )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/api/tentors/login", "/api/tentors/register", "/api/mentees/login", "/api/mentees/register", "/api/tentors/search").permitAll()
+                        .requestMatchers("/api/**").authenticated()  // Semua endpoint lainnya memerlukan autentikasi
+                        .anyRequest().permitAll())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);  // Menambahkan filter JWT sebelum UsernamePasswordAuthenticationFilter
 
         return http.build();
     }
