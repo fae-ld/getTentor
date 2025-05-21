@@ -11,10 +11,8 @@ public class MenteeDTO {
     private Integer id;
     private MahasiswaDTO mahasiswa;
     private String fotoUrl;
-    private List<TentorDTO> tentorFavorite;
     private String email;
     private String password;
-
 
     public MenteeDTO() {}
 
@@ -28,20 +26,14 @@ public class MenteeDTO {
         this.id = mentee.getId();
         this.mahasiswa = new MahasiswaDTO(mentee.getMahasiswa());
         this.fotoUrl = mentee.getFotoUrl();
-        this.tentorFavorite = mentee.getTentorFavorite()
-                .stream()
-                .map(TentorDTO::new)
-                .collect(Collectors.toList());
     }
     
-
     // Getters
     public Integer getId() { return id; }
     public MahasiswaDTO getMahasiswa() { return mahasiswa; }
     public String getNim() { return mahasiswa != null ? mahasiswa.getNim() : null; }
     public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
     public String getFotoUrl() { return fotoUrl; }
-    public List<TentorDTO> getTentorFavorite() { return tentorFavorite; }
     public String getEmail() { return email; }
 
     @JsonIgnore
@@ -49,11 +41,9 @@ public class MenteeDTO {
         return password;
     }
 
-
     // Setters
     public void setId(Integer id) { this.id = id; }
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl;}
-    public void setTentorFavorite(List<TentorDTO> tentorFavorite) { this.tentorFavorite = tentorFavorite;}
 
     public void setMahasiswa(MahasiswaDTO mahasiswa) {
         if (mahasiswa == null) {
