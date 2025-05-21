@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name = "review")
-
+@Table(
+        name = "review",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"mentee_id", "tentor_id"})
+)
 public class Review {
 
     @Id
@@ -13,11 +15,11 @@ public class Review {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "mentee_id")
+    @JoinColumn(name = "mentee_id", nullable = false)
     private Mentee mentee;
 
     @ManyToOne
-    @JoinColumn(name = "tentor_id")
+    @JoinColumn(name = "tentor_id", nullable = false)
     private Tentor tentor;
 
     @Lob
