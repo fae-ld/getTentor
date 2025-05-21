@@ -30,4 +30,6 @@ public class MahasiswaController {
     public ResponseEntity<List<Mahasiswa>> searchMahasiswa(@RequestParam String nama) {
         return ResponseEntity.ok(mahasiswaService.findMahasiswaByNama(nama));
     }
+
+
 }
