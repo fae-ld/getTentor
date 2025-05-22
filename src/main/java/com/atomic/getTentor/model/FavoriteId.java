@@ -1,4 +1,4 @@
-package com.example.favorite.model;
+package com.atomic.getTentor.model;
 
 import java.io.Serializable;
 import java.util.Objects;

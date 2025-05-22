@@ -1,10 +1,16 @@
 package com.atomic.getTentor.dto;
 
 import com.atomic.getTentor.model.Mahasiswa;
+import jakarta.validation.constraints.NotNull;
 
 public class MahasiswaDTO {
+    @NotNull(message = "nim tidak boleh kosong.")
     private String nim;
+
+    @NotNull(message = "nama tidak boleh kosong.")
     private String nama;
+
+    @NotNull(message = "email tidak boleh kosong.")
     private String email;
 
     public MahasiswaDTO() {}

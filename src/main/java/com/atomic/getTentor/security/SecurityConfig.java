@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/tentors/login", "/api/tentors/register").permitAll()
+                        .requestMatchers("/api/tentors/login", "/api/tentors/register", "api/mentees/login", "api/mentees/register").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
