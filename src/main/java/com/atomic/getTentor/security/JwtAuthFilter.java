@@ -26,6 +26,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        final String path = request.getRequestURI();
+        if (path.startsWith("/api/mentees/login") ||
+                path.startsWith("/api/mentees/register") ||
+                path.startsWith("/api/tentors/login") ||
+                path.startsWith("/api/tentors/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization"); // Mengambil header Authorization
         final String token;
         final String email;
