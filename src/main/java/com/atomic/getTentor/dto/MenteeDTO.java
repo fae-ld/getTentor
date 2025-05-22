@@ -1,7 +1,5 @@
 package com.atomic.getTentor.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.Mentee;
