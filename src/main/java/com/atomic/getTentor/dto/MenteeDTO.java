@@ -3,18 +3,18 @@ package com.atomic.getTentor.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.Mentee;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MenteeDTO {
     private Integer id;
-    private MahasiswaDTO mahasiswa;
+    private String nim;
+    private String nama;
     private String fotoUrl;
-    private List<TentorDTO> tentorFavorite;
     private String email;
     private String password;
-
 
     public MenteeDTO() {}
 
@@ -26,22 +26,22 @@ public class MenteeDTO {
             throw new IllegalArgumentException("Mentee tidak memiliki data Mahasiswa");
         }
         this.id = mentee.getId();
-        this.mahasiswa = new MahasiswaDTO(mentee.getMahasiswa());
+
+        Mahasiswa mahasiswa = mentee.getMahasiswa();
+        this.nama = mahasiswa.getNama();
+        this.nim = mahasiswa.getNim();
+        this.email = mahasiswa.getEmail();
+        this.setPassword(mahasiswa.getPassword());
+
         this.fotoUrl = mentee.getFotoUrl();
-        this.tentorFavorite = mentee.getTentorFavorite()
-                .stream()
-                .map(TentorDTO::new)
-                .collect(Collectors.toList());
     }
     
 
     // Getters
     public Integer getId() { return id; }
-    public MahasiswaDTO getMahasiswa() { return mahasiswa; }
-    public String getNim() { return mahasiswa != null ? mahasiswa.getNim() : null; }
-    public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
+    public String getNim() { return nim; }
+    public String getNama() { return nama; }
     public String getFotoUrl() { return fotoUrl; }
-    public List<TentorDTO> getTentorFavorite() { return tentorFavorite; }
     public String getEmail() { return email; }
 
     @JsonIgnore
@@ -53,14 +53,8 @@ public class MenteeDTO {
     // Setters
     public void setId(Integer id) { this.id = id; }
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl;}
-    public void setTentorFavorite(List<TentorDTO> tentorFavorite) { this.tentorFavorite = tentorFavorite;}
-
-    public void setMahasiswa(MahasiswaDTO mahasiswa) {
-        if (mahasiswa == null) {
-            throw new IllegalArgumentException("Mahasiswa tidak boleh null");
-        }
-        this.mahasiswa = mahasiswa;
-    }
+    public void setNim(String nim) {this.nim = nim;}
+    public void setNama(String nama) {this.nama = nama;}
 
     @JsonProperty
     public void setEmail(String email) {

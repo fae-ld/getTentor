@@ -25,14 +25,6 @@ public class Mentee {
     @JoinColumn(name="nim", referencedColumnName = "nim", unique = true)
     private Mahasiswa mahasiswa;
 
-    @ManyToMany
-    @JoinTable(
-        name = "Favorite",
-        joinColumns = @JoinColumn(name = "mentee_id"),
-        inverseJoinColumns = @JoinColumn(name = "tentor_id")
-    )
-    private List<Tentor> tentorFavorite = new ArrayList<Tentor>();;
-
     @Column(name="foto_url",length = 512)
     private String fotoUrl;
 
@@ -49,22 +41,6 @@ public class Mentee {
 
     public String getEmail() { return mahasiswa != null ? mahasiswa.getEmail() : null; }
     public String getPassword() { return mahasiswa != null ? mahasiswa.getPassword() : null;}
-
-    public List<Tentor> getTentorFavorite() {
-        return tentorFavorite;
-    }
-
-    public void setTentorFavorite(List<Tentor> tentorFavorite) {
-        this.tentorFavorite = tentorFavorite;
-    }
-
-    public void appendTentorFavorite(Tentor tentor) {
-        tentorFavorite.add(tentor);
-    }
-
-    public void removeTentorFavorite(Tentor tentor) {
-        tentorFavorite.remove(tentor);
-    }
 
     public void setFotoUrl(String fotoUrl){
         this.fotoUrl=fotoUrl;

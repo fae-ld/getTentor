@@ -44,20 +44,6 @@ public class MenteeController {
         return ResponseEntity.ok(menteeService.getAllMentees());
     }
 
-    @PostMapping("/{menteeId}/favorites/{tentorId}")
-    public ResponseEntity<String> addFavoriteTentor(@PathVariable Integer menteeId,@PathVariable Integer tentorId) {
-        Optional<Mentee> menteeOpt = MenteeRepository.findById(menteeId);
-        Optional<Tentor> tentorOpt = TentorRepository.findById(tentorId);
-        if (menteeOpt.isEmpty() || tentorOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mentee atau Tentor tidak ditemukan");
-        }
-        Mentee mentee = menteeOpt.get();
-        Tentor tentor = tentorOpt.get();
-        mentee.getTentorFavorite().add(tentor);  // make sure it's a Set or List
-        MenteeRepository.save(mentee);
-        return ResponseEntity.ok("Tentor berhasil ditambahkan ke favorit");
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MenteeDTO menteeDTO) {
         try {
@@ -77,6 +63,7 @@ public class MenteeController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody MenteeDTO menteeDTO) {
         try {
+            System.out.println(menteeDTO.getNim());
             menteeService.register(menteeDTO);
             String token = jwtService.generateToken(menteeDTO.getEmail());
 
