@@ -56,6 +56,7 @@ public class TentorService {
         Tentor tentor = new Tentor();
         tentor.setMahasiswa(mahasiswa);
         tentor.setIpk(tentorDTO.getIpk());
+        tentor.setNoTelp(tentorDTO.getNoTelp());
 
         // Gabungin List<String> pengalaman jadi String with pemisah "|"
         String pengalaman = tentorDTO.getPengalaman() != null

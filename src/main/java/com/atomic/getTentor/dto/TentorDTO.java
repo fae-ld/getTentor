@@ -20,6 +20,7 @@ public class TentorDTO {
     private Double rataRataRating;
     private List<ReviewDTO> listReview;
     private String fotoUrl;
+    private String noTelp;
 
 
     public TentorDTO() {}
@@ -46,6 +47,7 @@ public class TentorDTO {
             ? tentor.getListReview().stream().map(ReviewDTO::new).toList()
             : new ArrayList<>();
         this.fotoUrl = tentor.getFotoUrl();
+        this.noTelp = tentor.getNoTelp();
 
 
     }
@@ -59,6 +61,7 @@ public class TentorDTO {
     public Double getRataRataRating() {return rataRataRating;}
     public List<ReviewDTO> getListReview() { return listReview; }
     public String getFotoUrl() { return fotoUrl; }
+    public String getNoTelp() { return noTelp; }
 
     @JsonIgnore
     public String getPassword() {
@@ -74,6 +77,7 @@ public class TentorDTO {
     public void setRataRataRating(Double rataRataRating) {this.rataRataRating = rataRataRating;}
     public void setListReview(List<ReviewDTO> listReview) { this.listReview = listReview; }
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
+    public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
 
     public void setEmail(String email) {
         if (email == null || email.trim().isEmpty()) {

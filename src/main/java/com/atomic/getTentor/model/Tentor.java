@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -41,17 +39,21 @@ public class Tentor {
     @Column(name="foto_url",length = 512)
     private String fotoUrl;
 
+    @Column(name="no_telp",length = 12)
+    private String noTelp;
+
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
 
 
     public Tentor() {}
 
-    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl) {
+    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl, String noTelp) {
         this.mahasiswa = mahasiswa;
         this.ipk = ipk;
         this.pengalaman = pengalaman;
         this.fotoUrl = fotoUrl;
+        this.noTelp = noTelp;
     }
 
     @ManyToMany
@@ -72,6 +74,8 @@ public class Tentor {
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
     public void setFotoUrl(String fotoUrl){this.fotoUrl=fotoUrl;}
     public String getFotoUrl(){return this.fotoUrl;}
+    public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
+    public String getNoTelp() { return noTelp; }
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
 
