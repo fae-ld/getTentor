@@ -2,14 +2,12 @@ package com.atomic.getTentor.model;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(
         name = "review",
         uniqueConstraints = @UniqueConstraint(columnNames = {"mentee_id", "tentor_id"})
 )
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,8 +26,6 @@ public class Review {
 
     @Column(nullable = false)
     private Integer rating;
-
-
 
     public Review() {}
 
