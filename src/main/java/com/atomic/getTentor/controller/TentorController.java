@@ -7,11 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atomic.getTentor.dto.TentorDTO;
 import com.atomic.getTentor.security.JwtService;
@@ -31,13 +27,23 @@ public class TentorController {
         return ResponseEntity.ok(tentorService.getAllTentors());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<TentorDTO>> search(@RequestParam(required = false) String q) {
+        return ResponseEntity.ok(tentorService.searchTentors(q));
+    }
+
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody TentorDTO tentorDTO) {
         try {
-            tentorService.login(tentorDTO.getEmail(), tentorDTO.getPassword());
+            // Periksa apakah login berhasil dengan email dan password
+            tentorService.login(tentorDTO.getEmail(), tentorDTO.getPassword());  // Pastikan service login ini benar
+
+            // Generate token JWT setelah login berhasil
             String token = jwtService.generateToken(tentorDTO.getEmail());
-            
-            Map<String,Object> response = new HashMap<>();
+
+            // Response yang akan dikirim ke frontend
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("message", "Login berhasil");
 

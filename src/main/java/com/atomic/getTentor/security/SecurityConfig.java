@@ -17,8 +17,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/tentors/login", "/api/tentors/register", "api/mentees/login", "api/mentees/register").permitAll()
                         .requestMatchers("/api/**").authenticated()
