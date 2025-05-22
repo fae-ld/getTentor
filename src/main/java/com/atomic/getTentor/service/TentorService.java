@@ -32,7 +32,7 @@ public class TentorService {
 
     public void login(String email, String password) {
         Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
-        if (tentor == null || !tentor.getPassword().equals(password)) {
+        if (tentor == null || !passwordEncoder.matches(password, tentor.getMahasiswa().getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
     }
