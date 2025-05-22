@@ -63,6 +63,7 @@ public class MenteeController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody MenteeDTO menteeDTO) {
         try {
+            System.out.println(menteeDTO.getNim());
             menteeService.register(menteeDTO);
             String token = jwtService.generateToken(menteeDTO.getEmail());
 
