@@ -54,4 +54,3 @@ public class ReviewService {
         return reviewRepository.findByTentorId(tentorId);
     }
 }
-

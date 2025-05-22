@@ -36,7 +36,6 @@ public class MenteeDTO {
         this.fotoUrl = mentee.getFotoUrl();
     }
     
-
     // Getters
     public Integer getId() { return id; }
     public String getNim() { return nim; }
@@ -48,7 +47,6 @@ public class MenteeDTO {
     public String getPassword() {
         return password;
     }
-
 
     // Setters
     public void setId(Integer id) { this.id = id; }

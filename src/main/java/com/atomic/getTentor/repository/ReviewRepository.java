@@ -8,7 +8,6 @@ import java.util.Optional;
 import com.atomic.getTentor.model.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-
     List<Review> findByMenteeId(Integer menteeId);
     List<Review> findByTentorId(Integer tentorId);
     Optional<Review> findByMenteeAndTentor(Mentee mentee, Tentor tentor);

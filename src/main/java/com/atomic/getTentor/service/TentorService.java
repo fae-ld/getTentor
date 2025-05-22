@@ -32,11 +32,10 @@ public class TentorService {
 
     public void login(String email, String password) {
         Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
-        if (tentor == null || !passwordEncoder.matches(password, tentor.getPassword())) {
+        if (tentor == null || !passwordEncoder.matches(password, tentor.getMahasiswa().getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
     }
-
     public void register(TentorDTO tentorDTO) {
         // 1. Cek email ada ga
         if (mahasiswaRepository.existsByEmail(tentorDTO.getEmail())) {
@@ -66,5 +65,12 @@ public class TentorService {
 
         // 5. Simpen Tentor ke database
         tentorRepository.save(tentor);
+    }
+    public List<TentorDTO> searchTentors(String q) {
+        if (q == null || q.isBlank()) {
+            return tentorRepository.findAll().stream()
+                    .map(TentorDTO::new).toList();
+        }
+        return tentorRepository.findDistinctByMahasiswa_NimContainsIgnoreCaseOrMahasiswa_NamaContainsIgnoreCaseOrPengalamanContainsIgnoreCase(q,q,q).stream().map(TentorDTO::new).toList();
     }
 }

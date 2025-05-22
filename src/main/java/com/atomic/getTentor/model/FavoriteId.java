@@ -1,5 +1,7 @@
 package com.atomic.getTentor.model;
 
+
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 

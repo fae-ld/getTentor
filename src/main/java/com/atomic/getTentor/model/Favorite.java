@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @IdClass(FavoriteId.class)
-@Table(name = "favorite",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"mentee_id", "tentor_id"}))
+@Table(name = "favorite")
 public class Favorite {
     @Id
     @ManyToOne
@@ -24,7 +23,9 @@ public class Favorite {
         return mentee;
     }
 
-    public void setMentee(Mentee mentee) { this.mentee = mentee; }
+    public void setMentee(Mentee mentee) {
+        this.mentee = mentee;
+    }
 
     public Tentor getTentor() {
         return tentor;
