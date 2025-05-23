@@ -34,41 +34,40 @@ public class TentorController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody TentorDTO tentorDTO) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody TentorDTO tentorDTO) {
         try {
-            // Periksa apakah login berhasil dengan email dan password
-            tentorService.login(tentorDTO.getEmail(), tentorDTO.getPassword());  // Pastikan service login ini benar
-
-            // Generate token JWT setelah login berhasil
+            tentorService.login(tentorDTO.getEmail(), tentorDTO.getPassword());
             String token = jwtService.generateToken(tentorDTO.getEmail());
 
-            // Response yang akan dikirim ke frontend
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("message", "Login berhasil");
 
-            return ResponseEntity.ok(response.toString());
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody TentorDTO tentorDTO) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody TentorDTO tentorDTO) {
         try {
             tentorService.register(tentorDTO);
             String token = jwtService.generateToken(tentorDTO.getEmail());
 
-            Map<String,Object> response = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("message", "Registrasi berhasil");
-            
-            return ResponseEntity.ok(response.toString());
+
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
-    
 }
 
 
