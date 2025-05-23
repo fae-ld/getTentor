@@ -45,35 +45,38 @@ public class MenteeController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MenteeDTO menteeDTO) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody MenteeDTO menteeDTO) {
         try {
             menteeService.login(menteeDTO.getEmail(), menteeDTO.getPassword());
             String token = jwtService.generateToken(menteeDTO.getEmail());
-            
-            Map<String,Object> response = new HashMap<>();
+
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("message", "Login berhasil");
 
-            return ResponseEntity.ok(response.toString());
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody MenteeDTO menteeDTO) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody MenteeDTO menteeDTO) {
         try {
-            System.out.println(menteeDTO.getNim());
             menteeService.register(menteeDTO);
             String token = jwtService.generateToken(menteeDTO.getEmail());
 
-            Map<String,Object> response = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("message", "Registrasi berhasil");
-            
-            return ResponseEntity.ok(response.toString());
+
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 }
