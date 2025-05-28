@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tentor")
-public class Tentor {
+public class Tentor extends AbstractMahasiswa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +65,20 @@ public class Tentor {
     private List<MataKuliah> listMataKuliah = new ArrayList<MataKuliah>();
 
     // Getters & Setters
+    @Override
     public Integer getId() { return id; }
+
+    @Override
+    public String getEmail() {
+        return mahasiswa != null ? mahasiswa.getEmail() : null;
+    }
+
+    @Override
+    public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
+
+    @Override
+    public String getRole() { return "tentor"; }
+
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
     public Double getIpk() { return ipk; }
@@ -79,9 +92,6 @@ public class Tentor {
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
 
-    public String getEmail() {
-        return mahasiswa != null ? mahasiswa.getEmail() : null;
-    }
     public String getPassword() {
         return mahasiswa != null ? mahasiswa.getPassword() : null;
     }
