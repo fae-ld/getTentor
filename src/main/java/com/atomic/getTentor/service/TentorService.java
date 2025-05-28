@@ -50,6 +50,7 @@ public class TentorService {
             throw new RuntimeException("Invalid email or password");
         }
     }
+
     public void register(TentorDTO tentorDTO) {
         // 1. Cek email ada ga
         if (mahasiswaRepository.existsByEmail(tentorDTO.getEmail())) {
@@ -71,6 +72,11 @@ public class TentorService {
         tentor.setMahasiswa(mahasiswa);
         tentor.setIpk(tentorDTO.getIpk());
         tentor.setNoTelp(tentorDTO.getNoTelp());
+        if (tentorDTO.getFotoUrl() == null || tentorDTO.getFotoUrl().isEmpty()) {
+            tentor.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
+        } else {
+            tentor.setFotoUrl(tentorDTO.getFotoUrl());
+        }
 
         // Gabungin List<String> pengalaman jadi String with pemisah "|"
         String pengalaman = tentorDTO.getPengalaman() != null
@@ -81,6 +87,7 @@ public class TentorService {
         // 5. Simpen Tentor ke database
         tentorRepository.save(tentor);
     }
+
     public List<TentorDTO> searchTentors(String q) {
         if (q == null || q.isBlank()) {
             return tentorRepository.findAll().stream()
