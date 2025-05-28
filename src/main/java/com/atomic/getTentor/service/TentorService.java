@@ -71,12 +71,6 @@ public class TentorService {
         tentor.setMahasiswa(mahasiswa);
         tentor.setIpk(tentorDTO.getIpk());
         tentor.setNoTelp(tentorDTO.getNoTelp());
-        if (tentor.getFotoUrl() == null || tentor.getFotoUrl().isEmpty()) {
-            tentor.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
-        }else {
-            tentor.setFotoUrl(tentorDTO.getFotoUrl());
-        }
-
 
         // Gabungin List<String> pengalaman jadi String with pemisah "|"
         String pengalaman = tentorDTO.getPengalaman() != null
