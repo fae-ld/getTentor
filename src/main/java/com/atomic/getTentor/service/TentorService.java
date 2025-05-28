@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +71,12 @@ public class TentorService {
         tentor.setMahasiswa(mahasiswa);
         tentor.setIpk(tentorDTO.getIpk());
         tentor.setNoTelp(tentorDTO.getNoTelp());
+        if (tentor.getFotoUrl() == null || tentor.getFotoUrl().isEmpty()) {
+            tentor.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
+        }else {
+            tentor.setFotoUrl(tentorDTO.getFotoUrl());
+        }
+
 
         // Gabungin List<String> pengalaman jadi String with pemisah "|"
         String pengalaman = tentorDTO.getPengalaman() != null
