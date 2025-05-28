@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.atomic.getTentor.dto.TentorDTO;
 import com.atomic.getTentor.security.JwtService;
 import com.atomic.getTentor.service.TentorService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/tentors")
@@ -68,6 +69,25 @@ public class TentorController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestPart(value = "data", required = false) TentorDTO tentorDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtService.getEmailFromToken(token);
+
+            tentorService.updateTentorProfile(email, tentorDTO, file);
+
+            return ResponseEntity.ok(Map.of("message", "Profil berhasil diperbarui"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
 }
 
 

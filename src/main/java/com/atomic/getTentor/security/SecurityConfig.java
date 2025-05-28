@@ -37,7 +37,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/tentors/login", "/api/tentors/register", "/api/mentees/login", "/api/mentees/register").permitAll()
+                        .requestMatchers(
+                                "/api/tentors/login",
+                                "/api/tentors/register",
+                                "/api/mentees/login",
+                                "/api/mentees/register",
+                                "/api/images/view/**"
+                        ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
