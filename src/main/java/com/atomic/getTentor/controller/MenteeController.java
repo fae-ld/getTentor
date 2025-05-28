@@ -28,10 +28,10 @@ import com.atomic.getTentor.service.MenteeService;
 public class MenteeController {
 
     @Autowired
-    private MenteeRepository MenteeRepository;
+    private MenteeRepository menteeRepository;
 
     @Autowired
-    private TentorRepository TentorRepository;
+    private TentorRepository tentorRepository;
 
     @Autowired
     private MenteeService menteeService;
@@ -48,7 +48,8 @@ public class MenteeController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody MenteeDTO menteeDTO) {
         try {
             menteeService.login(menteeDTO.getEmail(), menteeDTO.getPassword());
-            String token = jwtService.generateToken(menteeDTO.getEmail());
+            Mentee mentee = menteeRepository.findByMahasiswaEmail(menteeDTO.getEmail());
+            String token = jwtService.generateToken(mentee);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
@@ -66,7 +67,8 @@ public class MenteeController {
     public ResponseEntity<Map<String, Object>> register(@RequestBody MenteeDTO menteeDTO) {
         try {
             menteeService.register(menteeDTO);
-            String token = jwtService.generateToken(menteeDTO.getEmail());
+            Mentee mentee = menteeRepository.findByMahasiswaEmail(menteeDTO.getEmail());
+            String token = jwtService.generateToken(mentee);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.atomic.getTentor.model.Tentor;
+import com.atomic.getTentor.repository.TentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class TentorController {
     private TentorService tentorService;
 
     @Autowired
+    private TentorRepository tentorRepository;
+
+    @Autowired
     private JwtService jwtService;
 
     @GetMapping
@@ -33,12 +38,12 @@ public class TentorController {
         return ResponseEntity.ok(tentorService.searchTentors(q));
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody TentorDTO tentorDTO) {
         try {
             tentorService.login(tentorDTO.getEmail(), tentorDTO.getPassword());
-            String token = jwtService.generateToken(tentorDTO.getEmail());
+            Tentor tentor = tentorRepository.findByMahasiswaEmail(tentorDTO.getEmail());
+            String token = jwtService.generateToken(tentor);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
@@ -56,7 +61,8 @@ public class TentorController {
     public ResponseEntity<Map<String, Object>> register(@RequestBody TentorDTO tentorDTO) {
         try {
             tentorService.register(tentorDTO);
-            String token = jwtService.generateToken(tentorDTO.getEmail());
+            Tentor tentor = tentorRepository.findByMahasiswaEmail(tentorDTO.getEmail());
+            String token = jwtService.generateToken(tentor);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);

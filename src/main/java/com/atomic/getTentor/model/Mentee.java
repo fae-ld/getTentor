@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "mentee")
-public class Mentee {
+public class Mentee extends AbstractMahasiswa {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -35,11 +35,21 @@ public class Mentee {
         this.fotoUrl = fotoUrl;
     }
 
+    @Override
     public Integer getId() { return id; }
+
+    @Override
+    public String getEmail() { return mahasiswa != null ? mahasiswa.getEmail() : null; }
+
+    @Override
+    public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
+
+    @Override
+    public String getRole() { return "mentee"; }
+
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
 
-    public String getEmail() { return mahasiswa != null ? mahasiswa.getEmail() : null; }
     public String getPassword() { return mahasiswa != null ? mahasiswa.getPassword() : null;}
 
     public void setFotoUrl(String fotoUrl){
