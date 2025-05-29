@@ -13,7 +13,6 @@ import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.repository.MataKuliahRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,6 @@ import com.atomic.getTentor.repository.MahasiswaRepository;
 import com.atomic.getTentor.repository.TentorRepository;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 public class TentorService {
@@ -96,10 +94,15 @@ public class TentorService {
     public List<TentorDTO> searchTentors(String q) {
         if (q == null || q.isBlank()) {
             return tentorRepository.findAll().stream()
-                    .map(TentorDTO::new).toList();
+                    .map(TentorDTO::new)
+                    .toList();
         }
-        return tentorRepository.findDistinctByMahasiswa_NimContainsIgnoreCaseOrMahasiswa_NamaContainsIgnoreCaseOrPengalamanContainsIgnoreCase(q,q,q).stream().map(TentorDTO::new).toList();
+
+        return tentorRepository.searchTentorByKeyword(q).stream()
+                .map(TentorDTO::new)
+                .toList();
     }
+
 
     public void updateTentorProfile(String email, TentorDTO updatedDTO, MultipartFile file) throws Exception {
         Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
