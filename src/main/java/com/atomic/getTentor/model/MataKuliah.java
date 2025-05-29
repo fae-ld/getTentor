@@ -18,10 +18,15 @@ public class MataKuliah {
     @ManyToMany(mappedBy = "listMataKuliah")
     private List<Tentor> listTentor = new ArrayList<Tentor>();
 
+    public MataKuliah() {
+        // wajib untuk Jackson dan JPA
+    }
+
     public MataKuliah(Integer id, String nama) {
         this.id = id;
         this.nama = nama;
     }
+
     public void setId(Integer id){this.id = id;}
     public Integer getId() {return this.id;}
     public String getNama() {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.atomic.getTentor.model.Mahasiswa;
+import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.model.Tentor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,9 +20,9 @@ public class TentorDTO {
     private String password;
     private Double rataRataRating;
     private List<ReviewDTO> listReview;
+    private List<MataKuliahDTO> listMataKuliah;
     private String fotoUrl;
     private String noTelp;
-
 
     public TentorDTO() {}
 
@@ -48,8 +49,9 @@ public class TentorDTO {
             : new ArrayList<>();
         this.fotoUrl = tentor.getFotoUrl();
         this.noTelp = tentor.getNoTelp();
-
-
+        this.listMataKuliah = tentor.getListMataKuliah() == null ? new ArrayList<>() : tentor.getListMataKuliah().stream()
+                .map(MataKuliahDTO::new)
+                .toList();
     }
 
     public Integer getId() { return id; }
@@ -62,13 +64,15 @@ public class TentorDTO {
     public List<ReviewDTO> getListReview() { return listReview; }
     public String getFotoUrl() { return fotoUrl; }
     public String getNoTelp() { return noTelp; }
+    public List<MataKuliahDTO> getListMataKuliah() {
+        return listMataKuliah;
+    }
 
     @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    
     public void setId(Integer id) { this.id = id; }
     public void setNim(String nim) { this.nim = nim; }
     public void setNama(String nama) { this.nama = nama; }
@@ -78,6 +82,9 @@ public class TentorDTO {
     public void setListReview(List<ReviewDTO> listReview) { this.listReview = listReview; }
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
     public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
+    public void setListMataKuliah(List<MataKuliahDTO> listMataKuliah) {
+        this.listMataKuliah = listMataKuliah;
+    }
 
     public void setEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
@@ -85,7 +92,6 @@ public class TentorDTO {
         }
         this.email = email;
     }
-    
 
     @JsonProperty("password")
     public void setPassword(String password) {
