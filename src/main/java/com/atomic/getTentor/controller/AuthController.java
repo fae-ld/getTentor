@@ -46,8 +46,9 @@ public class AuthController {
             return new UserProfileDTO(
                     mahasiswa.getNim(),
                     tentor.getNama(),
-                    tentor.getEmail(),
-                    tentor.getFotoUrl()
+                    mahasiswa.getEmail(),
+                    mahasiswa.getFotoUrl(),
+                    mahasiswa.getNoTelp()
             );
         }else {
             Mentee mentee = menteeRepository.findByMahasiswaEmail(email);
@@ -55,8 +56,9 @@ public class AuthController {
             return new UserProfileDTO(
                     mahasiswa.getNim(),
                     mentee.getNama(),
-                    mentee.getEmail(),
-                    mentee.getFotoUrl()
+                    mahasiswa.getEmail(),
+                    mahasiswa.getFotoUrl(),
+                    mahasiswa.getNoTelp()
             );
         }
     }

@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.atomic.getTentor.model.MataKuliah;
+import com.atomic.getTentor.repository.MataKuliahRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.parameters.P;
@@ -31,6 +33,9 @@ public class TentorService {
 
     @Autowired
     private MahasiswaRepository mahasiswaRepository;
+
+    @Autowired
+    private MataKuliahRepository mataKuliahRepository;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -62,6 +67,12 @@ public class TentorService {
         mahasiswa.setNim(tentorDTO.getNim());
         mahasiswa.setNama(tentorDTO.getNama());
         mahasiswa.setEmail(tentorDTO.getEmail());
+        mahasiswa.setNoTelp(tentorDTO.getNoTelp());
+        if (tentorDTO.getFotoUrl() == null || tentorDTO.getFotoUrl().isEmpty()) {
+            mahasiswa.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
+        } else {
+            mahasiswa.setFotoUrl(tentorDTO.getFotoUrl());
+        }
         mahasiswa.setPassword(passwordEncoder.encode(tentorDTO.getPassword())); // Hash password
 
         // 3. Simpen Mahasiswa ke database
@@ -71,12 +82,6 @@ public class TentorService {
         Tentor tentor = new Tentor();
         tentor.setMahasiswa(mahasiswa);
         tentor.setIpk(tentorDTO.getIpk());
-        tentor.setNoTelp(tentorDTO.getNoTelp());
-        if (tentorDTO.getFotoUrl() == null || tentorDTO.getFotoUrl().isEmpty()) {
-            tentor.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
-        } else {
-            tentor.setFotoUrl(tentorDTO.getFotoUrl());
-        }
 
         // Gabungin List<String> pengalaman jadi String with pemisah "|"
         String pengalaman = tentorDTO.getPengalaman() != null
@@ -100,45 +105,48 @@ public class TentorService {
         Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
         if (tentor == null) throw new RuntimeException("Tentor tidak ditemukan");
 
-        // Update data
-        if(updatedDTO != null) {
-            Mahasiswa mhs = tentor.getMahasiswa();
+        Mahasiswa mhs = tentor.getMahasiswa();
+
+        // Update data umum
+        if (updatedDTO != null) {
             if (updatedDTO.getNama() != null) mhs.setNama(updatedDTO.getNama());
-            if (updatedDTO.getNoTelp() != null) tentor.setNoTelp(updatedDTO.getNoTelp());
+            if (updatedDTO.getNoTelp() != null) mhs.setNoTelp(updatedDTO.getNoTelp());
             if (updatedDTO.getIpk() != null) tentor.setIpk(updatedDTO.getIpk());
+            if (updatedDTO.getListMataKuliah() != null) {
+                List<MataKuliah> validatedList = updatedDTO.getListMataKuliah().stream()
+                        .map(mk -> mataKuliahRepository.findById(mk.getId())
+                                .orElseThrow(() -> new RuntimeException("Mata kuliah dengan id " + mk.getId() + " tidak ditemukan")))
+                        .collect(Collectors.toList());
+                tentor.setListMataKuliah(validatedList);
+            }
 
             if (updatedDTO.getPengalaman() != null) {
                 tentor.setPengalaman(String.join("|", updatedDTO.getPengalaman()));
             }
 
-            mahasiswaRepository.save(mhs);
+            mahasiswaRepository.save(mhs); // Simpan perubahan mahasiswa
         }
 
-        // TODO: Update password?
-
-        // If ada file lama, delete
-        if (tentor.getFotoUrl() != null) {
-            Path oldPath = Paths.get(uploadDir).resolve(tentor.getFotoUrl());
-            Files.deleteIfExists(oldPath);
-        }
-
-        // Handle foto profil if ada
+        // Handle update foto profil
         if (file != null && !file.isEmpty()) {
-            // Simpen file
-            Files.createDirectories(Paths.get(uploadDir));
+            // Hapus file lama jika ada
+            if (tentor.getFotoUrl() != null) {
+                Path oldFilePath = Paths.get(uploadDir).resolve(tentor.getFotoUrl());
+                Files.deleteIfExists(oldFilePath);
+            }
+
+            // Simpan file baru
+            Files.createDirectories(Paths.get(uploadDir)); // Buat folder jika belum ada
             String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             String uniqueFileName = UUID.randomUUID() + "_" + originalFileName;
             Path filePath = Paths.get(uploadDir).resolve(uniqueFileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/images/view/")
-                    .path(uniqueFileName)
-                    .toUriString();
-            tentor.setFotoUrl(fileUrl);
+            mhs.setFotoUrl(uniqueFileName); // Simpan hanya nama file
+            mahasiswaRepository.save(mhs);
         }
 
-        // Simpen perubahan
+        // Simpan update tentor (jika ada)
         tentorRepository.save(tentor);
     }
 }

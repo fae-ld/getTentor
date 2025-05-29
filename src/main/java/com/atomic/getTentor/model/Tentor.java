@@ -36,24 +36,16 @@ public class Tentor extends AbstractMahasiswa {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
-    @Column(name="foto_url",length = 512)
-    private String fotoUrl;
-
-    @Column(name="no_telp",length = 12)
-    private String noTelp;
-
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
 
 
     public Tentor() {}
 
-    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman, String fotoUrl, String noTelp) {
+    public Tentor(Mahasiswa mahasiswa, Double ipk, String pengalaman) {
         this.mahasiswa = mahasiswa;
         this.ipk = ipk;
         this.pengalaman = pengalaman;
-        this.fotoUrl = fotoUrl;
-        this.noTelp = noTelp;
     }
 
     @ManyToMany
@@ -79,23 +71,24 @@ public class Tentor extends AbstractMahasiswa {
     @Override
     public String getRole() { return "tentor"; }
 
+    @Override
+    public String getFotoUrl() { return mahasiswa != null ? mahasiswa.getFotoUrl() : null; }
+
+    @Override
+    public String getNoTelp() { return mahasiswa != null ? mahasiswa.getNoTelp() : null; }
+
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
     public Double getIpk() { return ipk; }
     public void setIpk(Double ipk) { this.ipk = ipk; }
     public String getPengalaman() { return pengalaman; }
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
-    public void setFotoUrl(String fotoUrl){this.fotoUrl=fotoUrl;}
-    public String getFotoUrl(){return this.fotoUrl;}
-    public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
-    public String getNoTelp() { return noTelp; }
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
 
     public String getPassword() {
         return mahasiswa != null ? mahasiswa.getPassword() : null;
     }
-
     public void setPassword(String password) { this.mahasiswa.setPassword(password);}
 
     public List<String> getPengalamanList() {

@@ -49,8 +49,8 @@ public class TentorDTO {
         this.listReview = tentor.getListReview() != null
             ? tentor.getListReview().stream().map(ReviewDTO::new).toList()
             : new ArrayList<>();
-        this.fotoUrl = tentor.getFotoUrl();
-        this.noTelp = tentor.getNoTelp();
+        this.fotoUrl = tentor.getMahasiswa().getFotoUrl();
+        this.noTelp = tentor.getMahasiswa().getNoTelp();
         this.listMataKuliah = tentor.getListMataKuliah() == null ? new ArrayList<>() : tentor.getListMataKuliah().stream()
                 .map(MataKuliahDTO::new)
                 .toList();

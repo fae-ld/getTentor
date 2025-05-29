@@ -42,7 +42,8 @@ public class SecurityConfig {
                                 "/api/tentors/register",
                                 "/api/mentees/login",
                                 "/api/mentees/register",
-                                "/api/images/view/**"
+                                "/api/images/view/**",
+                                "/api/mata-kuliah"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()

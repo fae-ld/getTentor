@@ -13,6 +13,7 @@ public class MenteeDTO {
     private String fotoUrl;
     private String email;
     private String password;
+    private String noTelp;
 
     public MenteeDTO() {}
 
@@ -31,7 +32,8 @@ public class MenteeDTO {
         this.email = mahasiswa.getEmail();
         this.setPassword(mahasiswa.getPassword());
 
-        this.fotoUrl = mentee.getFotoUrl();
+        this.fotoUrl = mentee.getMahasiswa().getFotoUrl();
+        this.noTelp = mentee.getMahasiswa().getNoTelp();
     }
     
     // Getters
@@ -40,6 +42,7 @@ public class MenteeDTO {
     public String getNama() { return nama; }
     public String getFotoUrl() { return fotoUrl; }
     public String getEmail() { return email; }
+    public String getNoTelp() { return noTelp; }
 
     @JsonIgnore
     public String getPassword() {
@@ -51,6 +54,7 @@ public class MenteeDTO {
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl;}
     public void setNim(String nim) {this.nim = nim;}
     public void setNama(String nama) {this.nama = nama;}
+    public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
 
     @JsonProperty
     public void setEmail(String email) {
