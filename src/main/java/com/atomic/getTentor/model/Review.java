@@ -1,6 +1,9 @@
 package com.atomic.getTentor.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -26,6 +29,10 @@ public class Review {
 
     @Column(nullable = false)
     private Integer rating;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public Review() {}
 
@@ -71,5 +78,13 @@ public class Review {
     }
     public void setTentor(Tentor tentor) {
         this.tentor = tentor;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
