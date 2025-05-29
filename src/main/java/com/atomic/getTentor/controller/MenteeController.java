@@ -5,15 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.atomic.getTentor.dto.TentorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atomic.getTentor.dto.MenteeDTO;
 import com.atomic.getTentor.model.Mentee;
@@ -22,6 +18,7 @@ import com.atomic.getTentor.repository.MenteeRepository;
 import com.atomic.getTentor.repository.TentorRepository;
 import com.atomic.getTentor.security.JwtService;
 import com.atomic.getTentor.service.MenteeService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/mentees")
@@ -79,6 +76,24 @@ public class MenteeController {
             Map<String, Object> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestPart(value = "data", required = false) MenteeDTO menteeDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtService.getEmailFromToken(token);
+
+            menteeService.updateMenteeProfile(email, menteeDTO, file);
+
+            return ResponseEntity.ok(Map.of("message", "Profil berhasil diperbarui"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
 }

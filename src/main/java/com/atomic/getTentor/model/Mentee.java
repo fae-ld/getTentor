@@ -25,14 +25,10 @@ public class Mentee extends AbstractMahasiswa {
     @JoinColumn(name="nim", referencedColumnName = "nim", unique = true)
     private Mahasiswa mahasiswa;
 
-    @Column(name="foto_url",length = 512)
-    private String fotoUrl;
-
     public Mentee() {}
 
     public Mentee(Mahasiswa mahasiswa, String fotoUrl) {
         this.mahasiswa = mahasiswa;
-        this.fotoUrl = fotoUrl;
     }
 
     @Override
@@ -47,17 +43,16 @@ public class Mentee extends AbstractMahasiswa {
     @Override
     public String getRole() { return "mentee"; }
 
+    @Override
+    public String getFotoUrl() { return mahasiswa != null ? mahasiswa.getFotoUrl() : null; }
+
+    @Override
+    public String getNoTelp() { return mahasiswa != null ? mahasiswa.getNoTelp() : null; }
+
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
 
     public String getPassword() { return mahasiswa != null ? mahasiswa.getPassword() : null;}
-
-    public void setFotoUrl(String fotoUrl){
-        this.fotoUrl=fotoUrl;
-    }
-    
-    public String getFotoUrl(){
-        return this.fotoUrl;}
 
     public void login() {
         // implementation not yet;
