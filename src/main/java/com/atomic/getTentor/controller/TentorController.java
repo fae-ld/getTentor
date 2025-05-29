@@ -3,6 +3,7 @@ package com.atomic.getTentor.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.atomic.getTentor.model.Tentor;
 import com.atomic.getTentor.repository.TentorRepository;
@@ -36,6 +37,15 @@ public class TentorController {
     @GetMapping("/search")
     public ResponseEntity<List<TentorDTO>> search(@RequestParam(required = false) String q) {
         return ResponseEntity.ok(tentorService.searchTentors(q));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TentorDTO> getTentorById(@PathVariable Integer id) {
+        Optional<Tentor> tentorOpt = tentorRepository.findWithMataKuliahById(id);
+
+        return tentorOpt
+                .map(tentor -> ResponseEntity.ok(new TentorDTO(tentor)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/login")
