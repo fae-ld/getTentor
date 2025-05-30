@@ -1,18 +1,14 @@
-# OpenJDK 21 w Ubuntu (jammy) biar lebih stabil
-FROM eclipse-temurin:21-jdk-jammy
-
-# Set working directory
+# Stage 1: build
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy JAR hasil build Maven ke container
-COPY target/getTentor-*.jar app.jar
-
-# Buat folder uploads supaya volume mount aman
+# Stage 2: run
+FROM eclipse-temurin:21-jdk-jammy
+WORKDIR /app
+COPY --from=build /app/target/getTentor-*.jar app.jar
 RUN mkdir -p /app/uploads
-
-# Expose port aplikasi
 EXPOSE 8080
-
-# Jalankan Spring Boot JAR dengan config external
 ENTRYPOINT ["java", "-jar", "app.jar"]
-CMD ["--spring.config.location=file:/config/application.properties"]
