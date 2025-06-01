@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "mahasiswa")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Mahasiswa implements Account {
+public class Mahasiswa {
 
     @Id
     @Column(length = 12, columnDefinition = "CHAR(12)")
@@ -49,13 +49,4 @@ public class Mahasiswa implements Account {
     public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
     public String getNoTelp() { return noTelp; }
     public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
-
-    @Override
-    public void login() {}
-    @Override
-    public void register() {}
-    @Override
-    public void logout() {}
-    @Override
-    public void updateProfile() {}
 }
