@@ -9,20 +9,20 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.atomic.getTentor.model.MataKuliah;
-import com.atomic.getTentor.repository.MataKuliahRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.atomic.getTentor.dto.TentorDTO;
 import com.atomic.getTentor.model.Mahasiswa;
+import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.model.Tentor;
 import com.atomic.getTentor.repository.MahasiswaRepository;
+import com.atomic.getTentor.repository.MataKuliahRepository;
 import com.atomic.getTentor.repository.TentorRepository;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class TentorService {
@@ -66,11 +66,7 @@ public class TentorService {
         mahasiswa.setNama(tentorDTO.getNama());
         mahasiswa.setEmail(tentorDTO.getEmail());
         mahasiswa.setNoTelp(tentorDTO.getNoTelp());
-        if (tentorDTO.getFotoUrl() == null || tentorDTO.getFotoUrl().isEmpty()) {
-            mahasiswa.setFotoUrl("http://localhost:8080/api/images/view/default-profile.png");
-        } else {
-            mahasiswa.setFotoUrl(tentorDTO.getFotoUrl());
-        }
+        mahasiswa.setFotoUrl(tentorDTO.getFotoUrl());
         mahasiswa.setPassword(passwordEncoder.encode(tentorDTO.getPassword())); // Hash password
 
         // 3. Simpen Mahasiswa ke database
