@@ -10,5 +10,6 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 COPY --from=build /app/target/getTentor-*.jar app.jar
 RUN mkdir -p /app/uploads
+COPY uploads /app/uploads
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
