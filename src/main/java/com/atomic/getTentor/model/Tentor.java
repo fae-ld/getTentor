@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +40,12 @@ public class Tentor extends AbstractMahasiswa {
 
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "verification_status", nullable = false, length = 16)
+    private VerificationStatus verificationStatus;
+
+    
 
 
     public Tentor() {}
@@ -76,6 +84,7 @@ public class Tentor extends AbstractMahasiswa {
 
     @Override
     public String getNoTelp() { return mahasiswa != null ? mahasiswa.getNoTelp() : null; }
+    public VerificationStatus getVerificationStatus() {return verificationStatus;}
 
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
@@ -85,6 +94,8 @@ public class Tentor extends AbstractMahasiswa {
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
+    public void setVerificationStatus(VerificationStatus verificationStatus) {this.verificationStatus = verificationStatus;
+}
 
     public String getPassword() {
         return mahasiswa != null ? mahasiswa.getPassword() : null;
