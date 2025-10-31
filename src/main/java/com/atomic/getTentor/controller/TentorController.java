@@ -54,6 +54,18 @@ public class TentorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> DeleteTentor(@PathVariable Integer id) {
+        Optional<Tentor> tentorOpt = tentorRepository.findById(id);
+        System.err.println(tentorOpt.isPresent());
+        if (!tentorOpt.isPresent()){
+            return ResponseEntity.notFound().build();
+        }else{
+            tentorRepository.delete(tentorOpt.get());
+            return ResponseEntity.ok("Tentor Berhasil di hapus");
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody TentorDTO tentorDTO) {
         try {
