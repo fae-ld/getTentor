@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "/api/mentees/login",
                                 "/api/mentees/register",
                                 "/api/images/view/**",
-                                "/api/mata-kuliah"
+                                "/api/mata-kuliah",
+                                "/api/admins/login"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
