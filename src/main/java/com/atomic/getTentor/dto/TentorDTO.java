@@ -7,6 +7,7 @@ import java.util.List;
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.model.Tentor;
+import com.atomic.getTentor.model.VerificationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +26,7 @@ public class TentorDTO {
     private String noTelp;
     private Double averageRating;
     private Integer ratingCount;
+    private VerificationStatus verificationStatus;
 
     public TentorDTO() {}
 
@@ -56,6 +58,7 @@ public class TentorDTO {
                 .toList();
         this.averageRating = tentor.getAverageRating();
         this.ratingCount = this.listReview.size();
+        this.verificationStatus = tentor.getVerificationStatus();
     }
 
     public Integer getId() { return id; }
@@ -78,6 +81,9 @@ public class TentorDTO {
     public String getPassword() {
         return password;
     }
+    public VerificationStatus getVerificationStatus() {
+        return verificationStatus;
+    }
 
     public void setId(Integer id) { this.id = id; }
     public void setNim(String nim) { this.nim = nim; }
@@ -99,6 +105,10 @@ public class TentorDTO {
             throw new IllegalArgumentException("Email tidak boleh kosong");
         }
         this.email = email;
+    }
+
+    public void setVerificationStatus(VerificationStatus verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 
     @JsonProperty("password")
