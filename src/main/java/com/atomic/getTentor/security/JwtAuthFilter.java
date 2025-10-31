@@ -30,7 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/mentees/login") ||
                 path.startsWith("/api/mentees/register") ||
                 path.startsWith("/api/tentors/login") ||
-                path.startsWith("/api/tentors/register")) {
+                path.startsWith("/api/tentors/register") ||
+                path.startsWith("/api/admins/login")) {
             filterChain.doFilter(request, response);
             return;
         }
