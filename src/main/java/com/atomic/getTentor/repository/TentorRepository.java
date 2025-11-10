@@ -15,7 +15,8 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
     @EntityGraph(attributePaths = {"listMataKuliah"})
     Optional<Tentor> findWithMataKuliahById(Integer id);
 
-    List<Tentor> findByMahasiswaIsNotNull();
+
+    List<Tentor> findByMahasiswaIsNotNullOrderByCountFavoriteDesc();
     Tentor findByMahasiswaEmail(String email); 
 
     @Query("""
@@ -28,8 +29,8 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
        LOWER(m.nim) LIKE LOWER(CONCAT('%', :q, '%'))
     OR LOWER(m.nama) LIKE LOWER(CONCAT('%', :q, '%'))
     OR LOWER(t.pengalaman) LIKE LOWER(CONCAT('%', :q, '%'))
-    OR LOWER(mk.nama) LIKE LOWER(CONCAT('%', :q, '%'))
-  )
+    OR LOWER(mk.nama) LIKE LOWER(CONCAT('%', :q, '%')) 
+  ) ORDER BY t.countFavorite DESC
 """)
     List<Tentor> searchTentorByKeyword(@Param("q") String q);
 
@@ -48,6 +49,6 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
     List<Tentor> searchTentorByKeywordAdmin(@Param("q") String q);
 
 
-    List<Tentor> findByVerificationStatus(VerificationStatus verificationStatus);
+    List<Tentor> findByVerificationStatusOrderByCountFavoriteDesc(VerificationStatus verificationStatus);
 
 }
