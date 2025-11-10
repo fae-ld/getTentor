@@ -41,7 +41,7 @@ public class TentorService {
     private String uploadDir;
 
     public List<TentorDTO> getAllTentors() {
-        List<Tentor> tentors = tentorRepository.findByMahasiswaIsNotNull();
+        List<Tentor> tentors = tentorRepository.findByMahasiswaIsNotNullOrderByCountFavoriteDesc();
         List<Tentor> tentorApproved = new ArrayList<>();
         tentors.stream().forEach(tentor -> {
             if (tentor.getVerificationStatus() ==  VerificationStatus.APPROVED){
@@ -100,7 +100,7 @@ public class TentorService {
 
     public List<TentorDTO> searchTentors(String q) {
         if (q == null || q.isBlank()) {
-            return tentorRepository.findByVerificationStatus(VerificationStatus.APPROVED).stream()
+            return tentorRepository.findByVerificationStatusOrderByCountFavoriteDesc(VerificationStatus.APPROVED).stream()
                     .map(TentorDTO::new)
                     .toList();
         }
