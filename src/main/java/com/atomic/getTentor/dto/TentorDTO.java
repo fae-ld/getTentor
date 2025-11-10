@@ -27,6 +27,7 @@ public class TentorDTO {
     private Double averageRating;
     private Integer ratingCount;
     private VerificationStatus verificationStatus;
+    private Integer countFavorite;
 
     public TentorDTO() {}
 
@@ -59,6 +60,7 @@ public class TentorDTO {
         this.averageRating = tentor.getAverageRating();
         this.ratingCount = this.listReview.size();
         this.verificationStatus = tentor.getVerificationStatus();
+        this.countFavorite = tentor.getCountFavorite();
     }
 
     public Integer getId() { return id; }
@@ -84,6 +86,10 @@ public class TentorDTO {
     public VerificationStatus getVerificationStatus() {
         return verificationStatus;
     }
+
+    public Integer getCountFavorite(){
+        return this.countFavorite;
+    } 
 
     public void setId(Integer id) { this.id = id; }
     public void setNim(String nim) { this.nim = nim; }
@@ -117,5 +123,9 @@ public class TentorDTO {
             throw new IllegalArgumentException("Password tidak boleh kosong");
         }
         this.password = password;
+    }
+
+    public void setCountFavorite(Integer countFavorite){
+        this.countFavorite = countFavorite;
     }
 }
