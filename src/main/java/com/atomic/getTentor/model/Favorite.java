@@ -33,5 +33,6 @@ public class Favorite {
 
     public void setTentor(Tentor tentor) {
         this.tentor = tentor;
+        tentor.setFavorite(tentor.getCountFavorite()+1);
     }
 }
