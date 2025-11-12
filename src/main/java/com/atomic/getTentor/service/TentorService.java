@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import com.atomic.getTentor.dto.TentorDTO;
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.model.Tentor;
+import com.atomic.getTentor.model.VerificationStatus;
 import com.atomic.getTentor.repository.MahasiswaRepository;
 import com.atomic.getTentor.repository.MataKuliahRepository;
 import com.atomic.getTentor.repository.TentorRepository;
@@ -39,8 +41,16 @@ public class TentorService {
     private String uploadDir;
 
     public List<TentorDTO> getAllTentors() {
-        List<Tentor> tentors = tentorRepository.findByMahasiswaIsNotNull();
-        return tentors.stream()
+        List<Tentor> tentors = tentorRepository.findByMahasiswaIsNotNullOrderByCountFavoriteDesc();
+        List<Tentor> tentorApproved = new ArrayList<>();
+        tentors.stream().forEach(tentor -> {
+            if (tentor.getVerificationStatus() ==  VerificationStatus.APPROVED){
+                tentorApproved.add(tentor);
+            }
+        });
+        
+       
+        return tentorApproved.stream()
                 .map(TentorDTO::new)
                 .collect(Collectors.toList());
     }
@@ -82,6 +92,7 @@ public class TentorService {
                 ? String.join("|", tentorDTO.getPengalaman())
                 : "";
         tentor.setPengalaman(pengalaman);
+        tentor.setVerificationStatus(VerificationStatus.PENDING);
 
         // 5. Simpen Tentor ke database
         tentorRepository.save(tentor);
@@ -89,7 +100,7 @@ public class TentorService {
 
     public List<TentorDTO> searchTentors(String q) {
         if (q == null || q.isBlank()) {
-            return tentorRepository.findAll().stream()
+            return tentorRepository.findByVerificationStatusOrderByCountFavoriteDesc(VerificationStatus.APPROVED).stream()
                     .map(TentorDTO::new)
                     .toList();
         }

@@ -7,6 +7,7 @@ import java.util.List;
 import com.atomic.getTentor.model.Mahasiswa;
 import com.atomic.getTentor.model.MataKuliah;
 import com.atomic.getTentor.model.Tentor;
+import com.atomic.getTentor.model.VerificationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +26,8 @@ public class TentorDTO {
     private String noTelp;
     private Double averageRating;
     private Integer ratingCount;
+    private VerificationStatus verificationStatus;
+    private Integer countFavorite;
 
     public TentorDTO() {}
 
@@ -56,6 +59,8 @@ public class TentorDTO {
                 .toList();
         this.averageRating = tentor.getAverageRating();
         this.ratingCount = this.listReview.size();
+        this.verificationStatus = tentor.getVerificationStatus();
+        this.countFavorite = tentor.getCountFavorite();
     }
 
     public Integer getId() { return id; }
@@ -78,6 +83,13 @@ public class TentorDTO {
     public String getPassword() {
         return password;
     }
+    public VerificationStatus getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public Integer getCountFavorite(){
+        return this.countFavorite;
+    } 
 
     public void setId(Integer id) { this.id = id; }
     public void setNim(String nim) { this.nim = nim; }
@@ -101,11 +113,19 @@ public class TentorDTO {
         this.email = email;
     }
 
+    public void setVerificationStatus(VerificationStatus verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
     @JsonProperty("password")
     public void setPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
             throw new IllegalArgumentException("Password tidak boleh kosong");
         }
         this.password = password;
+    }
+
+    public void setCountFavorite(Integer countFavorite){
+        this.countFavorite = countFavorite;
     }
 }
