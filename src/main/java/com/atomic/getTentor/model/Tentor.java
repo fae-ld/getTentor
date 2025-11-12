@@ -39,6 +39,9 @@ public class Tentor extends AbstractMahasiswa {
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
 
+    @OneToOne(mappedBy= "tentor")
+    private ForgotPasswordTentor forgotPasswordTentor;
+
 
     public Tentor() {}
 

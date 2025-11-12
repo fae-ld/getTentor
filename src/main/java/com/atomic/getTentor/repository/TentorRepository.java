@@ -25,4 +25,11 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
        "   OR LOWER(mk.nama) LIKE LOWER(CONCAT('%', :q, '%'))")
     List<Tentor> searchTentorByKeyword(@org.springframework.data.repository.query.Param("q") String q);
 
+    /* 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Tentor t SET t.mahasiswa.password = :password WHERE t.mahasiswa.email = :email")
+    void updatePassword(@Param("password") String password, @Param("email") String email);
+    */
+
 }
