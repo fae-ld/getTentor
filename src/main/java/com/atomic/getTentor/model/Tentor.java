@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,6 +43,14 @@ public class Tentor extends AbstractMahasiswa {
 
     @OneToOne(mappedBy= "tentor")
     private ForgotPasswordTentor forgotPasswordTentor;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "verification_status", nullable = false, length = 16)
+    private VerificationStatus verificationStatus;
+
+    @Column(columnDefinition="INTEGER")
+    private Integer countFavorite;
+
+    
 
 
     public Tentor() {}
@@ -49,6 +59,7 @@ public class Tentor extends AbstractMahasiswa {
         this.mahasiswa = mahasiswa;
         this.ipk = ipk;
         this.pengalaman = pengalaman;
+        this.countFavorite = 0;
     }
 
     @ManyToMany
@@ -79,7 +90,9 @@ public class Tentor extends AbstractMahasiswa {
 
     @Override
     public String getNoTelp() { return mahasiswa != null ? mahasiswa.getNoTelp() : null; }
+    public VerificationStatus getVerificationStatus() {return verificationStatus;}
 
+    public Integer getCountFavorite(){return this.countFavorite;}
     public Mahasiswa getMahasiswa() { return mahasiswa; }
     public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
     public Double getIpk() { return ipk; }
@@ -88,10 +101,17 @@ public class Tentor extends AbstractMahasiswa {
     public void setPengalaman(String pengalaman) { this.pengalaman = pengalaman; }
     public List<MataKuliah> getListMataKuliah() {return this.listMataKuliah;}
     public void setListMataKuliah(List<MataKuliah> listMataKuliah) { this.listMataKuliah = listMataKuliah;}
+    public void setVerificationStatus(VerificationStatus verificationStatus) {this.verificationStatus = verificationStatus;
+}
 
     public String getPassword() {
         return mahasiswa != null ? mahasiswa.getPassword() : null;
     }
+
+    public void setFavorite(Integer countFavorite){
+        this.countFavorite = countFavorite;
+    }
+
     public void setPassword(String password) { this.mahasiswa.setPassword(password);}
 
     public List<String> getPengalamanList() {
