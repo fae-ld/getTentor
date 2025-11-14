@@ -49,6 +49,7 @@ public class SecurityConfig {
                                 "/api/images/view/**",
                                 "/api/mata-kuliah",
                                 "/api/forgotPasswordTentor/**",
+                                "/api/forgotPasswordMentee/**",
                                 "/api/admins/login"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
