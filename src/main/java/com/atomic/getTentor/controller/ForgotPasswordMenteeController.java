@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -75,12 +76,20 @@ public class ForgotPasswordMenteeController {
     @PostMapping("/verifyOTP")
     public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody VerifyOtpRequest request){
         Mentee mentee = menteeRepository.findByMahasiswaEmail(request.email());
+
+        ForgotPasswordMentee fp;
+        
         if (mentee == null) {
             throw new UsernameNotFoundException("Tolong berikan email yang valid");
         }
 
-        ForgotPasswordMentee fp = forgotPasswordMenteeRepository.findByOtpAndMentee(request.otp(), mentee)
+        try{
+            fp = forgotPasswordMenteeRepository.findByOtpAndMentee(request.otp(), mentee)
             .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + request.email()));
+        }catch(RuntimeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","OTP Tidak Sesuai"));
+        }
+        
         
         if (fp.getExpirationTime().before(Date.from(Instant.now()))){
             forgotPasswordMenteeRepository.deleteById(fp.getFpid());
