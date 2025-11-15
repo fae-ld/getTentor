@@ -30,7 +30,7 @@ import com.atomic.getTentor.security.JwtService;
 
 
 @RestController
-@RequestMapping("/api/forgotPasswordTentor")
+@RequestMapping("/api/forgotPasswordtentor")
 public class ForgotPasswordTentorController {
     private final TentorRepository tentorRepository;
     private final MahasiswaRepository mahasiswaRepository;
@@ -51,7 +51,7 @@ public class ForgotPasswordTentorController {
     public ResponseEntity<String> verifyEmail(@PathVariable String email){
         Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
         if (tentor == null) {
-            throw new UsernameNotFoundException("Tolong berikan email yang valid!!");
+            return ResponseEntity.badRequest().body("Email tidak ditemukan");
         }
         
         int otp = otpGenerator();
