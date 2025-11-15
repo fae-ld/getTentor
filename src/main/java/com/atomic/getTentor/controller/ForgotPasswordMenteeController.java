@@ -26,7 +26,7 @@ import com.atomic.getTentor.service.EmailService;
 
 
 @RestController
-@RequestMapping("/api/forgotPasswordMentee")
+@RequestMapping("/api/forgotPasswordmentee")
 public class ForgotPasswordMenteeController {
     private final MenteeRepository menteeRepository;
     private final MahasiswaRepository mahasiswaRepository;
