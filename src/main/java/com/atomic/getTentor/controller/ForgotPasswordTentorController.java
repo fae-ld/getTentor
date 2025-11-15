@@ -76,12 +76,18 @@ public class ForgotPasswordTentorController {
     @PostMapping("/verifyOTP")
     public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody VerifyOtpRequest request){
         Tentor tentor = tentorRepository.findByMahasiswaEmail(request.email());
+        ForgotPasswordTentor fp;
+
         if (tentor == null) {
             throw new UsernameNotFoundException("Tolong berikan email yang valid");
         }
 
-        ForgotPasswordTentor fp = forgotPasswordTentorRepository.findByOtpAndTentor(request.otp(), tentor)
+        try{
+            fp = forgotPasswordTentorRepository.findByOtpAndTentor(request.otp(), tentor)
             .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + request.email()));
+        }catch(RuntimeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","OTP Tidak Sesuai"));
+        }
         
         if (fp.getExpirationTime().before(Date.from(Instant.now()))){
             forgotPasswordTentorRepository.deleteById(fp.getFpid());
