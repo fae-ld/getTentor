@@ -2,6 +2,7 @@ package com.atomic.getTentor.controller;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -15,13 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atomic.getTentor.dto.ChangePasswordMentee;
+import com.atomic.getTentor.dto.ChangePassword;
 import com.atomic.getTentor.dto.MailBody;
+import com.atomic.getTentor.dto.VerifyOtpRequest;
 import com.atomic.getTentor.model.ForgotPasswordMentee;
 import com.atomic.getTentor.model.Mentee;
 import com.atomic.getTentor.repository.ForgotPasswordMenteeRepository;
 import com.atomic.getTentor.repository.MahasiswaRepository;
 import com.atomic.getTentor.repository.MenteeRepository;
+import com.atomic.getTentor.security.JwtService;
 import com.atomic.getTentor.service.EmailService;
 
 
@@ -31,13 +34,15 @@ public class ForgotPasswordMenteeController {
     private final MenteeRepository menteeRepository;
     private final MahasiswaRepository mahasiswaRepository;
     private final EmailService emailService;
+    private final JwtService jwtService;
     private final ForgotPasswordMenteeRepository forgotPasswordMenteeRepository;
     private final BCryptPasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
 
-    public ForgotPasswordMenteeController(MenteeRepository menteeRepository, MahasiswaRepository mahasiswaRepository, EmailService emailService, ForgotPasswordMenteeRepository forgotPasswordMenteeRepository){
+    public ForgotPasswordMenteeController(MenteeRepository menteeRepository, MahasiswaRepository mahasiswaRepository, EmailService emailService, JwtService jwtService, ForgotPasswordMenteeRepository forgotPasswordMenteeRepository){
         this.menteeRepository = menteeRepository;
         this.mahasiswaRepository = mahasiswaRepository;
         this.emailService = emailService;
+        this.jwtService = jwtService;
         this.forgotPasswordMenteeRepository = forgotPasswordMenteeRepository;
     }
 
@@ -57,7 +62,7 @@ public class ForgotPasswordMenteeController {
 
         ForgotPasswordMentee forgot = new ForgotPasswordMentee();
         forgot.setOtp(otp);
-        forgot.setExpirationTime(new Date(System.currentTimeMillis() + 2 * 60 * 1000)); // 2 menit
+        forgot.setExpirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000)); // 5 menit
         forgot.setMentee(mentee); 
 
         forgotPasswordMenteeRepository.save(forgot);
@@ -67,33 +72,70 @@ public class ForgotPasswordMenteeController {
         return ResponseEntity.ok("Email sent for verification!");
     }
 
-    @PostMapping("verifyOTP/{otp}/{email}")
-    public ResponseEntity<String> verifyOTP(@PathVariable Integer otp, @PathVariable String email){
-        Mentee mentee = menteeRepository.findByMahasiswaEmail(email);
+    @PostMapping("/verifyOTP")
+    public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody VerifyOtpRequest request){
+        Mentee mentee = menteeRepository.findByMahasiswaEmail(request.email());
         if (mentee == null) {
             throw new UsernameNotFoundException("Tolong berikan email yang valid");
         }
 
-        ForgotPasswordMentee fp = forgotPasswordMenteeRepository.findByOtpAndMentee(otp, mentee)
-            .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + email));
+        ForgotPasswordMentee fp = forgotPasswordMenteeRepository.findByOtpAndMentee(request.otp(), mentee)
+            .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + request.email()));
         
         if (fp.getExpirationTime().before(Date.from(Instant.now()))){
             forgotPasswordMenteeRepository.deleteById(fp.getFpid());
-            return new ResponseEntity<>("OTP telah kadaluarsa", HttpStatus.EXPECTATION_FAILED);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                    .body(Map.of("message", "OTP telah kadaluarsa"));
         }
 
-        return ResponseEntity.ok("OTP berhasil diverifikasi!");
+        String resetToken = jwtService.generateResetPasswordToken(request.email());
+
+         // Hapus record OTP
+        forgotPasswordMenteeRepository.deleteById(fp.getFpid());
+
+        return ResponseEntity.ok(Map.of(
+                "message", "OTP berhasil diverifikasi",
+                "resetToken", resetToken
+        ));
     }
 
-    @PostMapping("/changePassword/{email}")
-    public ResponseEntity<String> changePasswordHandlerMentee(@RequestBody ChangePasswordMentee changePasswordMentee, @PathVariable String email) {
-        //TODO: process POST request
-        
-        if (!Objects.equals(changePasswordMentee.password(), changePasswordMentee.repeatPassword())){
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePasswordHandlerMentee(@RequestBody ChangePassword changePassword) {
+        if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())){
             return new ResponseEntity<>("Tolong masukkan Password ulang!", HttpStatus.EXPECTATION_FAILED);
         }
 
-        String encodedPassword = passwordEncoder.encode(changePasswordMentee.password());
+        String token = changePassword.resetToken();
+
+        // Validasi token tidak null
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Reset token tidak boleh kosong!");
+        }
+
+        // Extract email dari token
+        String email;
+        try {
+            email = jwtService.getEmailFromToken(token);
+            
+            // Validasi token
+            if (!jwtService.validateToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Reset token tidak valid atau sudah expired!");
+            }
+            
+            // Cek apakah token reset password
+            if (!jwtService.isResetPasswordToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Token ini bukan token reset password!");
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Reset token tidak valid atau sudah expired!");
+        }
+
+        String encodedPassword = passwordEncoder.encode(changePassword.password());
         mahasiswaRepository.updatePassword(email, encodedPassword);
         
         return ResponseEntity.ok("Password telah diganti!");

@@ -3,15 +3,16 @@ package com.atomic.getTentor.security;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.atomic.getTentor.model.AbstractMahasiswa;
 import com.atomic.getTentor.model.Tentor;
-import com.atomic.getTentor.repository.MenteeRepository;
 import com.atomic.getTentor.repository.TentorRepository;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
@@ -45,6 +46,24 @@ public class JwtService {
                 .signWith(key);
 
         return builder.compact();
+    }
+
+    public String generateResetPasswordToken(String email) {
+        return Jwts.builder()
+                .setSubject("reset-password"+email)
+                .claim("email", email)
+                .claim("type", "reset")
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10 menit
+                .signWith(key)
+                .compact();
+    }
+
+
+    public boolean isResetPasswordToken(String token) {
+        Claims claims = extractAllClaims(token);
+        String type = claims.get("type", String.class);
+        return "reset".equals(type);
     }
 
 
