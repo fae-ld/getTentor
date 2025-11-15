@@ -2,6 +2,7 @@ package com.atomic.getTentor.controller;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -15,14 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atomic.getTentor.dto.ChangePasswordTentor;
+import com.atomic.getTentor.dto.ChangePassword;
 import com.atomic.getTentor.dto.MailBody;
+import com.atomic.getTentor.dto.VerifyOtpRequest;
 import com.atomic.getTentor.model.ForgotPasswordTentor;
 import com.atomic.getTentor.model.Tentor;
 import com.atomic.getTentor.repository.ForgotPasswordTentorRepository;
 import com.atomic.getTentor.repository.MahasiswaRepository;
 import com.atomic.getTentor.repository.TentorRepository;
 import com.atomic.getTentor.service.EmailService;
+import com.atomic.getTentor.security.JwtService;
 
 
 
@@ -32,14 +35,16 @@ public class ForgotPasswordTentorController {
     private final TentorRepository tentorRepository;
     private final MahasiswaRepository mahasiswaRepository;
     private final EmailService emailService;
+    private final JwtService jwtService;
     private final ForgotPasswordTentorRepository forgotPasswordTentorRepository;
     private final BCryptPasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
 
-    public ForgotPasswordTentorController(TentorRepository tentorRepository, MahasiswaRepository mahasiswaRepository, ForgotPasswordTentorRepository forgotPasswordTentorRepository, EmailService emailService) {
+    public ForgotPasswordTentorController(TentorRepository tentorRepository, MahasiswaRepository mahasiswaRepository, ForgotPasswordTentorRepository forgotPasswordTentorRepository, EmailService emailService, JwtService jwtService) {
         this.tentorRepository = tentorRepository;
         this.mahasiswaRepository = mahasiswaRepository;
         this.forgotPasswordTentorRepository = forgotPasswordTentorRepository;
         this.emailService = emailService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/verifyMail/{email}")
@@ -58,7 +63,7 @@ public class ForgotPasswordTentorController {
 
         ForgotPasswordTentor forgot = new ForgotPasswordTentor();
         forgot.setOtp(otp);
-        forgot.setExpirationTime(new Date(System.currentTimeMillis() + 2 * 60 * 1000)); // 2 menit
+        forgot.setExpirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000)); // 5 menit
         forgot.setTentor(tentor); 
 
         forgotPasswordTentorRepository.save(forgot);
@@ -68,33 +73,70 @@ public class ForgotPasswordTentorController {
         return ResponseEntity.ok("Email sent for verification!");
     }
 
-    @PostMapping("verifyOTP/{otp}/{email}")
-    public ResponseEntity<String> verifyOTP(@PathVariable Integer otp, @PathVariable String email){
-        Tentor tentor = tentorRepository.findByMahasiswaEmail(email);
+    @PostMapping("/verifyOTP")
+    public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody VerifyOtpRequest request){
+        Tentor tentor = tentorRepository.findByMahasiswaEmail(request.email());
         if (tentor == null) {
             throw new UsernameNotFoundException("Tolong berikan email yang valid");
         }
 
-        ForgotPasswordTentor fp = forgotPasswordTentorRepository.findByOtpAndTentor(otp, tentor)
-            .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + email));
+        ForgotPasswordTentor fp = forgotPasswordTentorRepository.findByOtpAndTentor(request.otp(), tentor)
+            .orElseThrow(() -> new RuntimeException("Nomor OTP invalid untuk email: " + request.email()));
         
         if (fp.getExpirationTime().before(Date.from(Instant.now()))){
             forgotPasswordTentorRepository.deleteById(fp.getFpid());
-            return new ResponseEntity<>("OTP telah kadaluarsa", HttpStatus.EXPECTATION_FAILED);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                    .body(Map.of("message", "OTP telah kadaluarsa"));
         }
 
-        return ResponseEntity.ok("OTP berhasil diverifikasi!");
+        String resetToken = jwtService.generateResetPasswordToken(request.email());
+
+         // Hapus record OTP
+        forgotPasswordTentorRepository.deleteById(fp.getFpid());
+
+        return ResponseEntity.ok(Map.of(
+                "message", "OTP berhasil diverifikasi",
+                "resetToken", resetToken
+        ));
     }
 
-    @PostMapping("/changePassword/{email}")
-    public ResponseEntity<String> changePasswordHandlerTentor(@RequestBody ChangePasswordTentor changePasswordTentor, @PathVariable String email) {
-        //TODO: process POST request
-        
-        if (!Objects.equals(changePasswordTentor.password(), changePasswordTentor.repeatPassword())){
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePasswordHandlerTentor(@RequestBody ChangePassword changePassword) {
+        if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())){
             return new ResponseEntity<>("Tolong masukkan Password ulang!", HttpStatus.EXPECTATION_FAILED);
         }
 
-        String encodedPassword = passwordEncoder.encode(changePasswordTentor.password());
+        String token = changePassword.resetToken();
+
+        // Validasi token tidak null
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Reset token tidak boleh kosong!");
+        }
+
+        // Extract email dari token
+        String email;
+        try {
+            email = jwtService.getEmailFromToken(token);
+            
+            // Validasi token
+            if (!jwtService.validateToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Reset token tidak valid atau sudah expired!");
+            }
+            
+            // Cek apakah token reset password
+            if (!jwtService.isResetPasswordToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Token ini bukan token reset password!");
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Reset token tidak valid atau sudah expired!");
+        }
+
+        String encodedPassword = passwordEncoder.encode(changePassword.password());
         mahasiswaRepository.updatePassword(email, encodedPassword);
         
         return ResponseEntity.ok("Password telah diganti!");

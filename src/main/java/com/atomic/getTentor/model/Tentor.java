@@ -41,8 +41,6 @@ public class Tentor extends AbstractMahasiswa {
     @OneToMany(mappedBy = "tentor")
     private List<Review> listReview = new ArrayList<>();
 
-    @OneToOne(mappedBy= "tentor")
-    private ForgotPasswordTentor forgotPasswordTentor;
     @Enumerated(EnumType.STRING)
     @Column(name = "verification_status", nullable = false, length = 16)
     private VerificationStatus verificationStatus;
