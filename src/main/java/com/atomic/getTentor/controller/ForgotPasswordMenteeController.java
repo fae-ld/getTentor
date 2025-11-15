@@ -29,7 +29,7 @@ import com.atomic.getTentor.service.EmailService;
 
 
 @RestController
-@RequestMapping("/api/forgotPasswordMentee")
+@RequestMapping("/api/forgotPasswordmentee")
 public class ForgotPasswordMenteeController {
     private final MenteeRepository menteeRepository;
     private final MahasiswaRepository mahasiswaRepository;
@@ -50,7 +50,7 @@ public class ForgotPasswordMenteeController {
     public ResponseEntity<String> verifyEmail(@PathVariable String email){
         Mentee mentee = menteeRepository.findByMahasiswaEmail(email);
         if (mentee == null) {
-            throw new UsernameNotFoundException("Tolong berikan email yang valid!!");
+            return ResponseEntity.badRequest().body("Email tidak ditemukan");
         }
         
         int otp = otpGenerator();
