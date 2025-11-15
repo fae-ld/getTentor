@@ -50,7 +50,7 @@ public class ForgotPasswordMenteeController {
     public ResponseEntity<String> verifyEmail(@PathVariable String email){
         Mentee mentee = menteeRepository.findByMahasiswaEmail(email);
         if (mentee == null) {
-            throw new UsernameNotFoundException("Tolong berikan email yang valid!!");
+            return ResponseEntity.badRequest().body("Email tidak ditemukan");
         }
         
         int otp = otpGenerator();
