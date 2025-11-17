@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,7 +41,7 @@ public class Tentor extends AbstractMahasiswa {
     @Column(columnDefinition = "TEXT")
     private String pengalaman;
 
-    @OneToMany(mappedBy = "tentor")
+    @OneToMany(mappedBy = "tentor",orphanRemoval = true)
     private List<Review> listReview = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -46,7 +49,7 @@ public class Tentor extends AbstractMahasiswa {
     private VerificationStatus verificationStatus;
 
     @Column(columnDefinition="INTEGER")
-    private Integer countFavorite;
+    private Integer countFavorite = 0;
 
     
 
@@ -66,6 +69,7 @@ public class Tentor extends AbstractMahasiswa {
         joinColumns = @JoinColumn(name = "tentor_id"),
         inverseJoinColumns = @JoinColumn(name = "mk_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MataKuliah> listMataKuliah = new ArrayList<MataKuliah>();
 
     // Getters & Setters
