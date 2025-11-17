@@ -1,5 +1,8 @@
 package com.atomic.getTentor.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +17,7 @@ public class Favorite {
     @Id
     @ManyToOne
     @JoinColumn(name = "tentor_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Tentor tentor;
 
     public Favorite() {}
