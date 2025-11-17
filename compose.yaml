@@ -8,41 +8,11 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  mysql-db:
-    image: mysql:8.0
-    container_name: mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: lelemulya
-      MYSQL_DATABASE: gettentor
-      MYSQL_USER: lelemantab
-      MYSQL_PASSWORD: pecel123
-    ports:
-      - "3306:3306"
-    networks:
-      - lelenetwork
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-  server-1:
+  server:
     build:
       context: .
-    container_name: server-1
-    depends_on:
-      mysql-db:
-        condition: service_healthy
     ports:
-      - "8080:8080"
-    networks:
-      - lelenetwork
-    restart: on-failure
-
-networks:
-  lelenetwork:
-    driver: bridge
+      - 8080:8080
 
 
 
