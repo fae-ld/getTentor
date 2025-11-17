@@ -16,7 +16,7 @@ networks:
 services:
   server:
     networks:
-      -lelenetwork
+      [lelenetwork]
     build:
       context: .
     ports:
