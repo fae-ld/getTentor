@@ -16,25 +16,34 @@ services:
       MYSQL_DATABASE: gettentor
       MYSQL_USER: lelemantab
       MYSQL_PASSWORD: pecel123
-    networks:
-      - lelenetwork
     ports:
       - "3306:3306"
+    networks:
+      - lelenetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
-  server:
+  server-1:
     build:
       context: .
     container_name: server-1
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
       - lelenetwork
+    restart: on-failure
 
 networks:
   lelenetwork:
     driver: bridge
+
 
 
 # The commented out section below is an example of how to define a PostgreSQL
