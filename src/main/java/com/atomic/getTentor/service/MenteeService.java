@@ -58,6 +58,10 @@ public class MenteeService {
             throw new RuntimeException("Email sudah digunakan!");
         }
 
+        if (mahasiswaRepository.existsByNim(menteeDTO.getNim())){
+            throw new RuntimeException("Nim sudah digunakan!");
+        }
+
         // 2. Membuat objek Mahasiswa
         Mahasiswa mahasiswa = new Mahasiswa();
         mahasiswa.setNim(menteeDTO.getNim());

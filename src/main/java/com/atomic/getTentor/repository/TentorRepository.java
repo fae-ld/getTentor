@@ -18,6 +18,7 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
 
     List<Tentor> findByMahasiswaIsNotNullOrderByCountFavoriteDesc();
     Tentor findByMahasiswaEmail(String email); 
+    boolean existsByMahasiswaNim(String nim);
 
     @Query("""
     SELECT DISTINCT t
@@ -47,8 +48,6 @@ public interface TentorRepository extends JpaRepository<Tentor, Integer> {
   )
 """)
     List<Tentor> searchTentorByKeywordAdmin(@Param("q") String q);
-
-
     List<Tentor> findByVerificationStatusOrderByCountFavoriteDesc(VerificationStatus verificationStatus);
 
     /* 

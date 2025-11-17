@@ -70,6 +70,10 @@ public class TentorService {
             throw new RuntimeException("Email sudah digunakan!");
         }
 
+        if (mahasiswaRepository.existsByNim(tentorDTO.getNim())){
+            throw new RuntimeException("Nim telah digunakan");
+        }
+
         // 2. Buat objek Mahasiswa
         Mahasiswa mahasiswa = new Mahasiswa();
         mahasiswa.setNim(tentorDTO.getNim());
