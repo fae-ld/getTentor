@@ -3,58 +3,69 @@ package com.atomic.getTentor.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "mentee")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Mentee extends Mahasiswa {
+public class Mentee extends AbstractMahasiswa {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
 
-    
-    @ManyToMany
-    @JoinTable(
-        name = "Favorite",
-        joinColumns = @JoinColumn(name = "mentee_id"),
-        inverseJoinColumns = @JoinColumn(name = "tentor_id")
-    )
-    private List<Tentor> tentorFavorite = new ArrayList<Tentor>();;
+    @OneToOne
+    @JoinColumn(name="nim", referencedColumnName = "nim", unique = true)
+    private Mahasiswa mahasiswa;
 
-    public Mentee(String nim, String nama, String email, String password) {
-        super(nim, nama, email, password);
-    }
+    public Mentee() {}
 
-    public List<Tentor> getTentorFavorite() {
-        return tentorFavorite;
-    }
-
-    public void setTentorFavorite(List<Tentor> tentorFavorite) {
-        this.tentorFavorite = tentorFavorite;
-    }
-
-    public void appendTentorFavorite(Tentor tentor) {
-        tentorFavorite.add(tentor);
-    }
-
-    public void removeTentorFavorite(Tentor tentor) {
-        tentorFavorite.remove(tentor);
+    public Mentee(Mahasiswa mahasiswa, String fotoUrl) {
+        this.mahasiswa = mahasiswa;
     }
 
     @Override
+    public Integer getId() { return id; }
+
+    @Override
+    public String getEmail() { return mahasiswa != null ? mahasiswa.getEmail() : null; }
+
+    @Override
+    public String getNama() { return mahasiswa != null ? mahasiswa.getNama() : null; }
+
+    @Override
+    public String getRole() { return "mentee"; }
+
+    @Override
+    public String getFotoUrl() { return mahasiswa != null ? mahasiswa.getFotoUrl() : null; }
+
+    @Override
+    public String getNoTelp() { return mahasiswa != null ? mahasiswa.getNoTelp() : null; }
+
+    public Mahasiswa getMahasiswa() { return mahasiswa; }
+    public void setMahasiswa(Mahasiswa mahasiswa) { this.mahasiswa = mahasiswa; }
+
+    public String getPassword() { return mahasiswa != null ? mahasiswa.getPassword() : null;}
+
     public void login() {
         // implementation not yet;
     }
 
-    @Override
     public void register() {
         // implementation not yet;
     }
 
-    @Override
     public void logout() {
         // implementation not yet;
     }
 
-    @Override
     public void updateProfile() {
         // implementation not yet;
     }
