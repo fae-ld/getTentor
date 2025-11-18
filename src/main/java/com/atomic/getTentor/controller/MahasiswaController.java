@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/mahasiswa")
 public class MahasiswaController {
+
     @Autowired
     private MahasiswaService mahasiswaService;
 
